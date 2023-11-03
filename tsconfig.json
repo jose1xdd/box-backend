@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": "/src",
-    "paths": {
-      "@box/*": ["src/*"]
-    },
-    "outDir": "./dist",
-    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs",                                /* Specify what module code is generated. */          /* Allow 'import x from y' when a module doesn't have a default export. */
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "target": "ES6",                // El nivel de ECMAScript que se generará
+    "module": "CommonJS",           // El sistema de módulos a utilizar (puedes usar "ES6" si estás en un entorno moderno)
+    "outDir": "./dist",             // La carpeta de salida para los archivos generados
+    "rootDir": "./src",             // La carpeta que contiene tu código fuente TypeScript
+    "strict": true,
+    "noImplicitAny": false,                 // Habilita estrictas revisiones de tipo
+    "esModuleInterop": true         // Permite la interoperabilidad entre CommonJS y ES6
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"]
+  "include": [
+    "src/**/*.ts"                  // Patrón para incluir los archivos TypeScript
+  ],
+  "exclude": [
+    "node_modules"                // Directorios o archivos que deben excluirse de la compilación
+  ],
+  "typeRoots": [
+    "./src/types"  // Directorio personalizado para archivos .d.ts
+  ]
 }

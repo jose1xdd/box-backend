@@ -8,7 +8,7 @@ export const logger = winston.createLogger({
 			format: ()=> DateTime.now().toFormat('yyyy-MM-dd HH:mm'),
 		}),
 		winston.format.printf(({ timestamp, message }) => {
-			return `[${timestamp}]: ${message}`;
+			return `[${timestamp}]: ${message}\n`;
 		}),
 		winston.format.colorize({
 			all: true,
