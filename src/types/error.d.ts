@@ -5,5 +5,5 @@ import {
 } from 'express';
 
 declare global {
-    export type CallBack = (req:Request, res:Response, next:NextFunction)=>Promise<any>
+    export type CallBack = (req:Request, res:Response, next:NextFunction)=>Promise<any>|void
 }
