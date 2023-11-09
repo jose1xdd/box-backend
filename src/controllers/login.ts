@@ -1,7 +1,11 @@
 import { capture } from '../middlewares/errorhandler';
 import User from '../database/models/user';
 import WebToken from '../database/models/webToken';
-import { comparePassword, getNewWebToken } from '../codeUtils/security';
+import {
+	comparePassword,
+	encrypt,
+	getNewWebToken
+} from '../codeUtils/security';
 import { DateTime } from 'luxon';
 export const loginController = {
 
@@ -20,9 +24,14 @@ export const loginController = {
 			token = await WebToken.findOneAndUpdate({ _id: Token.id }, { ttl: DateTime.now().plus({ hour: 1 }).toJSDate() }, { new: true });
 		}else{
 			//create Token
-			token = await WebToken.create(getNewWebToken(user.id));
+			const SesionToken = getNewWebToken();
+			const data = {
+				userId: user.id,
+				token: SesionToken,
+				ttl: DateTime.now().plus({ hour: 1 }).toJSDate(),
+			};
+			token = await WebToken.create(data);
 		}
-		res.send({ token: token.token, userId: user.id });
-
+		res.send({ token: encrypt(token.token), userId: user.id });
 	})
 };
