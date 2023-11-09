@@ -3,6 +3,7 @@ import { userController } from '../controllers/user';
 import { bodyValidator } from '../middlewares/validator';
 import * as yup from 'yup';
 import { dateRegex } from '../codeUtils/globals';
+import { checkSession } from '../middlewares/checkSession';
 
 export const userRouter = Router({ mergeParams: true });
 
@@ -16,7 +17,7 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	password: yup.string().required(),
-}).noUnknown(true)), userController.create);
+}).noUnknown(true)), checkSession, userController.create);
 
 userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
@@ -28,7 +29,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	password: yup.string().required(),
-}).noUnknown(true)), userController.create);
+}).noUnknown(true)), checkSession, userController.create);
 
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
@@ -40,4 +41,4 @@ userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	password: yup.string().required(),
-}).noUnknown(true)), userController.create);
+}).noUnknown(true)), checkSession, userController.create);
