@@ -1,19 +1,20 @@
-import { Iphysical_test } from './physical_test';
+import { IphysicalTest } from './physicalTest';
 import { Iweight_category } from './weight_category';
 
 export interface Iuser {
     name : string,
     lastName : string,
-    birth_date : Date,
+    birthDate : Date,
     cedula : string,
     email : string,
+    weight?: number,
     phone : string,
-    adress : string,
+    address : string,
     password : string,
     role : string,
     photo? : string,
-    weight_category? : Iweight_category,
-    physical_test? : Iphysical_test[]
+    weightCategory? : Iweight_category,
+    physicalTest? : IphysicalTest[]
 }
 
 export interface IUserDocument extends Iuser, Document {}

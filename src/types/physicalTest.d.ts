@@ -3,6 +3,6 @@ export interface Icriterio {
     repeats : number
 }
 
-export interface Iphysical_test {
+export interface IphysicalTest {
     test: Icriterio[]
 }
