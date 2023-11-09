@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "check": "tsc --noEmit",
+    "check:ts": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "build": "npm run check && npm run lint && npm run lint:fix && tsc"
+    "build": "npm run check:ts && npm run lint && npm run lint:fix && tsc"
   },
   "nodemonConfig": {
     "ext": "ts,yaml",
