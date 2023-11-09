@@ -10,6 +10,5 @@ export const connection = async () => {
 		})
 		.catch((error)=>{
 			logger.error('No se pudo conectar a la mongo', error);
-
 		});
 };
