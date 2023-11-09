@@ -1,5 +1,5 @@
 import { IphysicalTest } from './physicalTest';
-import { Iweight_category } from './weight_category';
+import { IweightCategory } from './weightCategory';
 
 export interface Iuser {
     name : string,
@@ -13,7 +13,7 @@ export interface Iuser {
     password : string,
     role : string,
     photo? : string,
-    weightCategory? : Iweight_category,
+    weightCategory? : IweightCategory,
     physicalTest? : IphysicalTest[]
 }
 
