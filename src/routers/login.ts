@@ -5,7 +5,7 @@ import { loginController } from '../controllers/login';
 
 export const loginRouter = Router({ mergeParams: true });
 
-loginRouter.post('/Login', bodyValidator(yup.object().shape({
+loginRouter.post('/', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	password: yup.string().required(),
 }).noUnknown(true)), loginController.login);
