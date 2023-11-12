@@ -1,8 +1,10 @@
-export interface Icriterio {
-    name : string,
+import { IcriterioTest } from './criterioTest';
+
+export interface Icriterio extends IcriterioTest {
     repeats : number
 }
 
 export interface IphysicalTest {
+    date: Date,
     test: Icriterio[]
 }

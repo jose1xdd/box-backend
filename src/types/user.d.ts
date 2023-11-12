@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { IphysicalTest } from './physicalTest';
 import { IweightCategory } from './weightCategory';
 
@@ -10,6 +11,7 @@ export interface Iuser {
     weight?: number,
     phone : string,
     address : string,
+    club: mongoose.ObjectId,
     password : string,
     role : string,
     photo? : string,

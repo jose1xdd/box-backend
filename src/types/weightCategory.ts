@@ -4,3 +4,5 @@ export interface IweightCategory {
    maxWeight : number,
    minWeight : number
 }
+
+export interface IweightCategoryDocument extends IweightCategory, Document { }
