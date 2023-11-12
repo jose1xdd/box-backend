@@ -12,6 +12,13 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 	weight: Number,
 	phone: String,
 	address: String,
+	club: {
+		type: mongoose.Types.ObjectId,
+		default(this: IUserDocument) {
+			if (this.role !== 'Admin') return null;
+			return undefined;
+		},
+	},
 	password: String,
 	role: {
 		type: String,
