@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
+import combat from '../models/shemas/combat';
 import { IcombatDocument } from '../../types/combat';
-import weightCategoryModel from './weightCategory';
+import { combatModel } from './static/combat';
 
-const combatSchema = new mongoose.Schema<IcombatDocument>({
-	boxer1: mongoose.Types.ObjectId,
-	boxer2: mongoose.Types.ObjectId,
-	status: String,
-	weigthCategory: weightCategoryModel
-});
-const CombatModel = mongoose.model('Combats', combatSchema);
-export default CombatModel;
+export const Combat = mongoose.model<IcombatDocument, typeof combatModel>('combats', combat);

@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
+import club from '../models/shemas/club';
 import { IclubDocument } from '../../types/club';
+import { clubModel } from './static/club';
 
-const clubSchema = new mongoose.Schema<IclubDocument>({
-	name: String,
-	description: String,
-	photo: String,
-});
-
-const clubModel = mongoose.model('Clubs', clubSchema);
-export default clubModel;
+export const Club = mongoose.model<IclubDocument, typeof clubModel>('clubs', club);
