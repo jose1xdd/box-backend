@@ -1,8 +1,8 @@
 import { decrypt } from '../codeUtils/security';
 import { validateToken } from '../codeUtils/webToken';
-import WebToken from '../database/models/webToken';
+import { WebToken } from '../database/models/webToken';
 import { capture } from './errorhandler';
-import User from '../database/models/user';
+import { User } from '../database/models/user';
 
 export const checkSession = capture(async (req, res, next) => {
 	const token = req.headers.sessiontoken as string;

@@ -1,14 +1,6 @@
 import mongoose from 'mongoose';
+import webToken from '../models/shemas/webToken';
 import { IWebTokenDocument } from '../../types/webToken';
+import { webTokenModel } from './static/webToken';
 
-const webTokenShema = new mongoose.Schema<IWebTokenDocument>({
-	userId: mongoose.Types.ObjectId,
-	ttl: {
-		type: Date,
-		require: true
-	},
-	token: String
-});
-
-const webTokenModel = mongoose.model('webToken', webTokenShema);
-export default webTokenModel;
+export const WebToken = mongoose.model<IWebTokenDocument, typeof webTokenModel>('webTokens', webToken);

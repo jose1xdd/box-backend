@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
+import criterioTest from '../models/shemas/criterioTest';
 import { IcriterioTestDocument } from '../../types/criterioTest';
+import { criterioTestModel } from './static/criterioTest';
 
-const criterioTestSchema = new mongoose.Schema<IcriterioTestDocument>({
-	name: {
-		type: String,
-		required: true,
-	}
-});
-
-const criterioTestModel = mongoose.model('criterioTest', criterioTestSchema);
-export default criterioTestModel;
+export const CriterioTest = mongoose.model<IcriterioTestDocument, typeof criterioTestModel>('criterioTest', criterioTest);
