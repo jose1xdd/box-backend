@@ -1,7 +1,7 @@
 import { capture } from './errorhandler';
-import WebToken from '../database/models/webToken';
+import { WebToken } from '../database/models/webToken';
 import { decrypt } from '../codeUtils/security';
-import User from '../database/models/user';
+import { User } from '../database/models/user';
 import { logger } from '../logger/winston';
 
 export const checkAuth = (roles: [string]) => capture(async (req, res, next) => {

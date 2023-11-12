@@ -1,6 +1,6 @@
 import { capture } from '../middlewares/errorhandler';
-import User from '../database/models/user';
-import WebToken from '../database/models/webToken';
+import { User } from '../database/models/user';
+import { WebToken } from '../database/models/webToken';
 import {
 	comparePassword,
 	encrypt,

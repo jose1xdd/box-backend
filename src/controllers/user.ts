@@ -1,5 +1,5 @@
 import { encrypPassword } from '../codeUtils/security';
-import User from '../database/models/user';
+import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
 
 export const userController = {
