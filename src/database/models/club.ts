@@ -7,5 +7,5 @@ const clubSchema = new mongoose.Schema<IclubDocument>({
 	photo: String,
 });
 
-const clubModel = mongoose.model('Users', clubSchema);
+const clubModel = mongoose.model('Clubs', clubSchema);
 export default clubModel;
