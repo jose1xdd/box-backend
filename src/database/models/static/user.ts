@@ -2,8 +2,7 @@ import { Model } from 'mongoose';
 import { IUserDocument } from '../../../types/user';
 
 export class userModel extends Model<IUserDocument> {
-	static fetchUserBuId(userId: string){
-		return this.findById(userId);
+	static updateUser(userId: string, data: IUserDocument){
+		return this.findByIdAndUpdate(userId, data, { projection: { password: 0, role: 0, __v: 0 }, new: true });
 	}
-
 }
