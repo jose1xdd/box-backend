@@ -12,5 +12,12 @@ export const userController = {
 		req.body.password = encrypPassword(req.body.password);
 		const data = await User.create(req.body);
 		res.send({ user: data });
+	}),
+
+	updateUser: capture(async (req, res)=>{
+		const user = await User.updateUser(req.query.userId as string, req.body);
+		//If user not exists
+		if (!user) throw Error('El usuario no se encuentra registrado');
+		res.send({ user: user });
 	})
 };
