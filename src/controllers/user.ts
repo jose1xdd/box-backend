@@ -14,8 +14,18 @@ export const userController = {
 		res.send({ user: data });
 	}),
 
+	//update an user
 	updateUser: capture(async (req, res)=>{
 		const user = await User.updateUser(req.query.userId as string, req.body);
+		//If user not exists
+		if (!user) throw Error('El usuario no se encuentra registrado');
+		res.send({ user: user });
+	}),
+
+	//get an user by id
+	getUser: capture(async (req, res)=>{
+		const userId = req.query.userId as string;
+		const user = await User.getUserById(userId);
 		//If user not exists
 		if (!user) throw Error('El usuario no se encuentra registrado');
 		res.send({ user: user });
