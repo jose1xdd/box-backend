@@ -54,3 +54,8 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 	phone: yup.string(),
 	address: yup.string(),
 }).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateUser);
+
+//get an user by id
+userRouter.get('/', queryValidator(yup.object().shape({
+	userId: yup.string().required(),
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUser);
