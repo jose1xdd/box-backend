@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
 import { IUserDocument } from '../../../types/user';
+import { DEFAUL_LIMIT } from '../../../codeUtils/globals';
 
 export class userModel extends Model<IUserDocument> {
 	static updateUser(userId: string, data: IUserDocument){
@@ -8,5 +9,15 @@ export class userModel extends Model<IUserDocument> {
 
 	static getUserById(userId: string){
 		return this.findById(userId, { password: 0, __v: 0 });
+	}
+
+	static getUserListByRole(limit: number = DEFAUL_LIMIT, role: string){
+		let roles = {};
+		const constrains = {
+			password: 0,
+			__v: 0
+		};
+		if(role) roles = { role: role };
+		return this.find(roles, constrains).limit(limit);
 	}
 }

@@ -37,5 +37,12 @@ export const clubsController = {
 		//If club does not exist
 		if(!mongoose.Types.ObjectId.isValid(clubId)) throw Error('No se encuentra registrado un club con ese ID');
 		res.send({ club: club });
+	}),
+
+	//get club List
+	getClubList: capture(async (req, res)=>{
+		const limit = parseInt(req.query.limit as string);
+		const clubs = await Club.getClubList(limit);
+		res.send({ clubs: clubs });
 	})
 };
