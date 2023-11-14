@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { encrypPassword } from '../codeUtils/security';
 import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
+import { Club } from '../database/models/club';
 
 export const userController = {
 
@@ -45,5 +46,37 @@ export const userController = {
 		const role = req.query.role as string;
 		const users = await User.getUserListByRole(limit, role);
 		res.send({ users: users });
-	})
+	}),
+
+	//update user´s club
+	updateUserClub: capture(async (req, res)=>{
+		const clubId = req.body.clubId as string;
+		const userId = req.query.userId as string;
+		//If user id is not valid
+		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del user no es valido');
+		//If club is is not valid
+		if(!mongoose.Types.ObjectId.isValid(clubId)) throw Error('El ID del club no es valido');
+		//If user not exist
+		const user = await User.findById(userId);
+		if(!user) throw Error('El usuario no se encuentra registrado');
+		//If club not exist
+		const club = await Club.findById(clubId);
+		if(!club) throw Error('El club no se encuentra registrado');
+		//If user had a club already
+		if(user.club != null) {
+			//eliminate the user from de club's member list
+			const pastClubId = user.club;
+			const pastClub = await Club.findById(pastClubId);
+			const indice = pastClub.members.indexOf(userId);
+			pastClub.members.splice(indice, 1);
+			await Club.updateClub(pastClubId, pastClub);
+		}
+		//Update the user
+		user.club = clubId;
+		const result = await User.updateUser(userId, user);
+		//agregate the user at new club's member list
+		club.members.push(userId);
+		await Club.updateClub(clubId, club);
+		res.send({ user: result });
+	}),
 };

@@ -60,7 +60,15 @@ userRouter.get('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUser);
 
+//get the user List
 userRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
 	role: yup.string()
 }).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUsersList);
+
+//change user's club
+userRouter.patch('/Club', queryValidator(yup.object().shape({
+	userId: yup.string().required(),
+}).noUnknown(true)), bodyValidator(yup.object().shape({
+	clubId: yup.string().required()
+}).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateUserClub);
