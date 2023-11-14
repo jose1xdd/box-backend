@@ -59,3 +59,8 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 userRouter.get('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUser);
+
+userRouter.get('/List', queryValidator(yup.object().shape({
+	limit: yup.string(),
+	role: yup.string()
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUsersList);

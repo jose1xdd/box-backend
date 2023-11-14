@@ -5,6 +5,7 @@ import { capture } from '../middlewares/errorhandler';
 
 export const userController = {
 
+	//create an initial user
 	create: capture(async (req, res)=>{
 		const user = await User.findOne({ email: req.body.email });
 		//If user its repeat
@@ -36,5 +37,13 @@ export const userController = {
 		//If user not exists
 		if (!user) throw Error('El usuario no se encuentra registrado');
 		res.send({ user: user });
+	}),
+
+	//get the user list
+	getUsersList: capture(async (req, res)=>{
+		const limit = parseInt(req.query.limit as string);
+		const role = req.query.role as string;
+		const users = await User.getUserListByRole(limit, role);
+		res.send({ users: users });
 	})
 };

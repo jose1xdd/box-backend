@@ -27,3 +27,8 @@ clubsRouter.patch('/', queryValidator(yup.object().shape({
 clubsRouter.get('/', queryValidator(yup.object().shape({
 	clubId: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth([]), clubsController.updateClub);
+
+//get club list
+clubsRouter.get('/List', queryValidator(yup.object().shape({
+	limit: yup.string(),
+}).noUnknown(true)), checkSession, checkAuth([]), clubsController.getClubList);
