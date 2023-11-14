@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { encrypPassword } from '../codeUtils/security';
 import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
@@ -16,7 +17,11 @@ export const userController = {
 
 	//update an user
 	updateUser: capture(async (req, res)=>{
-		const user = await User.updateUser(req.query.userId as string, req.body);
+		const userId = req.query.userId as string;
+		const data = req.body;
+		//If user id is not valid
+		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
+		const user = await User.updateUser(userId, data);
 		//If user not exists
 		if (!user) throw Error('El usuario no se encuentra registrado');
 		res.send({ user: user });
@@ -25,6 +30,8 @@ export const userController = {
 	//get an user by id
 	getUser: capture(async (req, res)=>{
 		const userId = req.query.userId as string;
+		//If user id is not valid
+		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
 		const user = await User.getUserById(userId);
 		//If user not exists
 		if (!user) throw Error('El usuario no se encuentra registrado');
