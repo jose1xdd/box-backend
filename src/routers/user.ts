@@ -16,6 +16,7 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	cedula: yup.string().required(),
 	weight: yup.number().required(),
 	email: yup.string().required().email(),
+	club: yup.string(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	password: yup.string().required(),
