@@ -19,4 +19,17 @@ export class weightCategoryModel extends Model<IweightCategoryDocument> {
 		};
 		return this.findOne(constrains);
 	}
+
+	static getWeightCategoriesByWeight(data){
+		const minWeight = data.minWeight;
+		const maxWeight = data.maxWeight;
+		let constrains = {};
+		if(minWeight) {
+			constrains = { $and: [
+				{ 'minWeight': { $gte: minWeight } },
+				{ 'maxWeight': { $lte: maxWeight } }
+			] };
+		}
+		return this.find(constrains);
+	}
 }

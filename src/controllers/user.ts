@@ -3,16 +3,20 @@ import { encrypPassword } from '../codeUtils/security';
 import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
 import { Club } from '../database/models/club';
+import { weightCategory } from '../database/models/weightCategory';
 export const userController = {
 
 	//create an initial user
 	create: capture(async (req, res)=>{
 		const data = req.body;
 		const user = await User.findOne({ email: data.email });
+
 		//If user its repeat
 		if (user) throw Error('El usuario ya se encuentra registrado');
+
 		//Encrypt the password
 		req.body.password = encrypPassword(req.body.password);
+
 		//assign the user´s club
 		let club;
 		if(data.club) {
@@ -20,7 +24,18 @@ export const userController = {
 			club = await Club.getClubById(data.club);
 			if(!club) throw Error('El club no se encuentra registrado');
 		}
+
+		//assign the user´s category
+		let wCategory;
+		if(data.weightCategory) {
+			if(!mongoose.Types.ObjectId.isValid(data.weightCategory)) throw Error('El ID de la categoria de peso no es valido ');
+			wCategory = await weightCategory.findById(data.weightCategory);
+			if(!wCategory) throw Error('Esa categoria no se encuentra registrada');
+		}
+
+		//create the user
 		const result = await User.create(data);
+
 		//Update club'member list
 		if(club) {
 			club.members.push(result['_id']);
@@ -89,7 +104,7 @@ export const userController = {
 			user.club = clubId;
 			user = await User.updateUser(userId, user);
 			//agregate the user at new club's member list
-			club.members.push(userId);
+			club.members.push(user['_id']);
 			await Club.updateClub(clubId, club);
 		}
 

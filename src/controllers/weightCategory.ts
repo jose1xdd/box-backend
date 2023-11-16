@@ -1,6 +1,5 @@
 
 import { weightCategory } from '../database/models/weightCategory';
-import { logger } from '../logger/winston';
 import { capture } from '../middlewares/errorhandler';
 export const weightCategoryController = {
 
@@ -14,11 +13,25 @@ export const weightCategoryController = {
 		if(minWeight >= maxWeight) throw Error('El peso minimo no puede ser mayor al maximo');
 		const exist = await weightCategory.existWeightCategory(data);
 		//If already exist
-		logger.info(exist);
-		logger.info(data);
 		if(exist) throw Error('Ya existe una categora de peso con esas caracteristicas');
 		//create the new category
 		const result = await weightCategory.create(data);
+		res.send({ weightCategory: result });
+	}),
+
+	//get Weight categories
+	getWeightCategories: capture(async (req, res)=>{
+		const { minWeight, maxWeight } = req.query;
+		const data = {};
+		if(typeof minWeight != typeof maxWeight) throw Error('Se han enviado datos incompletos (pesos)');
+		else {
+			if(minWeight && maxWeight){
+				if(minWeight > maxWeight) throw Error('No puede existir un minWeight mayor a maxWeght');
+				data['minWeight'] = minWeight;
+				data['maxWeight'] = maxWeight;
+			}
+		}
+		const result = await weightCategory.getWeightCategoriesByWeight(data);
 		res.send({ weightCategory: result });
 	}),
 };
