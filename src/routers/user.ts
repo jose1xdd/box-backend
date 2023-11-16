@@ -79,3 +79,8 @@ userRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
 	role: yup.string()
 }).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUsersList);
+
+//disable an user
+userRouter.delete('/Delete', queryValidator(yup.object().shape({
+	userId: yup.string().required(),
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.disableUser);
