@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 	club: {
 		type: mongoose.Types.ObjectId,
 		default(this: IUserDocument) {
-			if (this.role !== 'Admin') return null;
+			if (this.role === 'Deportista') return null;
 			return undefined;
 		},
 	},
