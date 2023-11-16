@@ -11,7 +11,7 @@ export class clubModel extends Model<IclubDocument> {
 	}
 
 	static getClubById(clubId: string){
-		return this.findOne({ _id: clubId }, { projection: { __v: 0 }, new: true });
+		return this.findOne({ _id: clubId }, { projection: { __v: 0 } });
 	}
 
 	static getClubList(limit: number){

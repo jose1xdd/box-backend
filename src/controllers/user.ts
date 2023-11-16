@@ -7,13 +7,26 @@ export const userController = {
 
 	//create an initial user
 	create: capture(async (req, res)=>{
-		const user = await User.findOne({ email: req.body.email });
+		const data = req.body;
+		const user = await User.findOne({ email: data.email });
 		//If user its repeat
 		if (user) throw Error('El usuario ya se encuentra registrado');
 		//Encrypt the password
 		req.body.password = encrypPassword(req.body.password);
-		const data = await User.create(req.body);
-		res.send({ user: data });
+		//assign the user´s club
+		let club;
+		if(data.club) {
+			if(!mongoose.Types.ObjectId.isValid(data.club)) throw Error('El ID del club no es valido');
+			club = await Club.getClubById(data.club);
+			if(!club) throw Error('El club no se encuentra registrado');
+		}
+		const result = await User.create(data);
+		//Update club'member list
+		if(club) {
+			club.members.push(result['_id']);
+			await Club.updateClub(club['_id'], club);
+		}
+		res.send({ user: result });
 	}),
 
 	//update an user
