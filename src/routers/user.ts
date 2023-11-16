@@ -21,7 +21,6 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	weightCategory: yup.string(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-	password: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createDeportista);
 
 //Create admin
