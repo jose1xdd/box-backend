@@ -1,5 +1,5 @@
 
-import { weightCategory } from '../database/models/weightCategory';
+import { WeightCategory } from '../database/models/weightCategory';
 import { capture } from '../middlewares/errorhandler';
 export const weightCategoryController = {
 
@@ -11,11 +11,11 @@ export const weightCategoryController = {
 
 		//If weight is not valid
 		if(minWeight >= maxWeight) throw Error('El peso minimo no puede ser mayor al maximo');
-		const exist = await weightCategory.existWeightCategory(data);
+		const exist = await WeightCategory.existWeightCategory(data);
 		//If already exist
 		if(exist) throw Error('Ya existe una categora de peso con esas caracteristicas');
 		//create the new category
-		const result = await weightCategory.create(data);
+		const result = await WeightCategory.create(data);
 		res.send({ weightCategory: result });
 	}),
 
@@ -31,7 +31,7 @@ export const weightCategoryController = {
 				data['maxWeight'] = maxWeight;
 			}
 		}
-		const result = await weightCategory.getWeightCategoriesByWeight(data);
+		const result = await WeightCategory.getWeightCategoriesByWeight(data);
 		res.send({ weightCategory: result });
 	}),
 };
