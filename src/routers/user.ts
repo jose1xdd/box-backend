@@ -9,6 +9,7 @@ import { checkEditPermition } from '../middlewares/checkEditPermisions';
 
 export const userRouter = Router({ mergeParams: true });
 
+//Create deportista
 userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
@@ -21,31 +22,29 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	password: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.create);
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createDeportista);
 
+//Create admin
 userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
 	cedula: yup.string().required(),
-	role: yup.string().required().oneOf(['Admin']),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-	password: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.create);
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createAdmin);
 
+//Create trainer
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
 	cedula: yup.string().required(),
-	role: yup.string().required().oneOf(['Entrenador']),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-	password: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.create);
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTrainer);
 
 //Update an user
 userRouter.patch('/', queryValidator(yup.object().shape({

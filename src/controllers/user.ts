@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import crypto from 'crypto';
 import { encrypPassword } from '../codeUtils/security';
 import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
@@ -6,16 +7,17 @@ import { Club } from '../database/models/club';
 import { weightCategory } from '../database/models/weightCategory';
 export const userController = {
 
-	//create an initial user
-	create: capture(async (req, res)=>{
+	//create an deportista user
+	createDeportista: capture(async (req, res)=>{
 		const data = req.body;
-		const user = await User.findOne({ email: data.email });
+		const user = await User.findOne({ $or: [{ email: data.email }, { cedula: data.cedula }] });
 
 		//If user its repeat
 		if (user) throw Error('El usuario ya se encuentra registrado');
 
 		//Encrypt the password
-		req.body.password = encrypPassword(req.body.password);
+		const password = crypto.randomBytes(8).toString('hex');
+		data.password = encrypPassword(password);
 
 		//assign the user´s club
 		let club;
@@ -35,12 +37,57 @@ export const userController = {
 
 		//create the user
 		const result = await User.create(data);
+		result.password = password;
 
 		//Update club'member list
 		if(club) {
 			club.members.push(result['_id']);
 			await Club.updateClub(club['_id'], club);
 		}
+		res.send({ user: result });
+	}),
+
+	//Create an admin
+	createAdmin: capture(async (req, res)=>{
+		const data = req.body;
+		const user = await User.findOne({ $or: [{ email: data.email }, { cedula: data.cedula }] });
+
+		//If user its repeat
+		if (user) throw Error('El usuario ya se encuentra registrado');
+
+		//Encrypt the password
+		const password = crypto.randomBytes(8).toString('hex');
+		data.password = encrypPassword(password);
+
+		//Asign role
+		data.role = 'Admin';
+
+		//create the user
+		const result = await User.create(data);
+		result.password = password;
+
+		res.send({ user: result });
+	}),
+
+	//Create an admin
+	createTrainer: capture(async (req, res)=>{
+		const data = req.body;
+		const user = await User.findOne({ $or: [{ email: data.email }, { cedula: data.cedula }] });
+
+		//If user its repeat
+		if (user) throw Error('El usuario ya se encuentra registrado');
+
+		//Encrypt the password
+		const password = crypto.randomBytes(8).toString('hex');
+		data.password = encrypPassword(password);
+
+		//Asign role
+		data.role = 'Entrenador';
+
+		//create the user
+		const result = await User.create(data);
+		result.password = password;
+
 		res.send({ user: result });
 	}),
 
