@@ -23,6 +23,11 @@ clubsRouter.patch('/', queryValidator(yup.object().shape({
 	photo: yup.string()
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), clubsController.updateClub);
 
+// Delete a club
+clubsRouter.delete('/Delete', queryValidator(yup.object().shape({
+	clubId: yup.string().required(),
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), clubsController.deleteClub);
+
 //get club by Id
 clubsRouter.get('/', queryValidator(yup.object().shape({
 	clubId: yup.string().required(),

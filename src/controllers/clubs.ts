@@ -1,6 +1,7 @@
 import { capture } from '../middlewares/errorhandler';
 import { Club } from '../database/models/club';
 import mongoose from 'mongoose';
+import { User } from '../database/models/user';
 
 export const clubsController = {
 	create: capture(async (req, res)=>{
@@ -13,6 +14,7 @@ export const clubsController = {
 		res.send({ club: club });
 	}),
 
+	//update a info club
 	updateClub: capture(async (req, res)=>{
 		const data = req.body;
 		const clubId = req.query.clubId as string;
@@ -29,6 +31,20 @@ export const clubsController = {
 		res.send({ club: club });
 	}),
 
+	deleteClub: capture(async (req, res)=>{
+		const clubId = req.query.clubId as string;
+		//If id is not valid
+		if(!mongoose.Types.ObjectId.isValid(clubId)) throw Error('El ID del club no es valido');
+		//If club not exist
+		const club = await Club.getClubById(clubId);
+		if(!club) throw Error('El club no se encuentra registrado');
+		//delete club
+		await Club.deleteOne();
+		await User.deleteClubFromUser(club._id);
+		res.send({ club: 'Club eliminado' });
+	}),
+
+	//get a club by Id
 	getClub: capture(async (req, res)=>{
 		const clubId = req.query.clubId as string;
 		//If id is not valid

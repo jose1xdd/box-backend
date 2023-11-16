@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { IUserDocument } from '../../../types/user';
 import { DEFAUL_LIMIT } from '../../../codeUtils/globals';
 
@@ -19,5 +19,9 @@ export class userModel extends Model<IUserDocument> {
 		};
 		if(role) roles = { role: role };
 		return this.find(roles, constrains).limit(limit);
+	}
+
+	static deleteClubFromUser(clubId: mongoose.Types.ObjectId){
+		return this.updateMany({ club: clubId }, { $set: { club: null } });
 	}
 }
