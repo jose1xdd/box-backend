@@ -5,6 +5,7 @@ import { User } from '../database/models/user';
 import { capture } from '../middlewares/errorhandler';
 import { Club } from '../database/models/club';
 import { WeightCategory } from '../database/models/weightCategory';
+import { DisableUser } from '../database/models/disabledUsers';
 export const userController = {
 
 	//create an deportista user
@@ -165,5 +166,22 @@ export const userController = {
 		const role = req.query.role as string;
 		const users = await User.getUserListByRole(limit, role);
 		res.send({ users: users });
+	}),
+
+	//disable an user
+	disableUser: capture(async (req, res)=>{
+		const userId = req.query.userId as string;
+		//If id is not valid
+		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
+		//If user not exists
+		const user = await User.getUserById(userId);
+		if (!user) throw Error('El usuario no se encuentra registrado o activo');
+
+		//Delete the user
+		await User.deleteOne(user);
+		await DisableUser.create({
+			...user.toObject()
+		});
+		res.send({ users: 'Usuario eliminado' });
 	})
 };
