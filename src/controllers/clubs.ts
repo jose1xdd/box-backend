@@ -39,7 +39,7 @@ export const clubsController = {
 		const club = await Club.getClubById(clubId);
 		if(!club) throw Error('El club no se encuentra registrado');
 		//delete club
-		await Club.deleteOne();
+		await Club.deleteOne(club);
 		await User.deleteClubFromUser(club._id);
 		res.send({ club: 'Club eliminado' });
 	}),
