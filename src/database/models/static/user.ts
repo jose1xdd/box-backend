@@ -24,4 +24,8 @@ export class userModel extends Model<IUserDocument> {
 	static deleteClubFromUser(clubId: mongoose.Types.ObjectId){
 		return this.updateMany({ club: clubId }, { $set: { club: null } });
 	}
+
+	static deleteWeightCategoryFromUser(categoryId: mongoose.Types.ObjectId){
+		return this.updateMany({ weightCategory: categoryId }, { $set: { weightCategory: null } });
+	}
 }
