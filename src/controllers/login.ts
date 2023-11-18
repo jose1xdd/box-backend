@@ -13,7 +13,7 @@ export const loginController = {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email: email });
 		//If user exist
-		if(!user) throw Error('El usuario ya se encuentra registrado');
+		if(!user) throw Error('El usuario no  se encuentra registrado');
 		//If password its correct
 		if (!comparePassword(password, user.password)) throw Error('La constraseña o el usuario son incorrectos');
 		//If token already exist
