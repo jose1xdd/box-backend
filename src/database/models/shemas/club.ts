@@ -5,7 +5,14 @@ import { clubModel } from '../static/club';
 const clubSchema = new mongoose.Schema<IclubDocument>({
 	name: String,
 	description: String,
-	photo: String,
+	photo: {
+		type: String,
+		default: null
+	},
+	members: {
+		type: [],
+		default: []
+	}
 });
 
 clubSchema.loadClass(clubModel);
