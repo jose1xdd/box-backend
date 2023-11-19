@@ -3,6 +3,7 @@ import { IUserDocument } from '../../../types/user';
 import { UserDefaultRol } from '../../../codeUtils/globals';
 import { physicalTestSchema } from '../../../controllers/global';
 import { userModel } from '../static/user';
+import roleSchema from './role';
 
 const userSchema = new mongoose.Schema<IUserDocument>({
 	name: String,
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 	},
 	password: String,
 	role: {
-		type: String,
+		type: String || roleSchema,
 		default: UserDefaultRol
 	},
 	photo: String,
