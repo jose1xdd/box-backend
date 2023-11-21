@@ -28,7 +28,7 @@ export const testCriteryController = {
 
 	//get critery test list
 	getCriteryList: capture(async (req, res)=>{
-		const result = await CriterioTest.find();
+		const result = await CriterioTest.getCriteryList();
 		res.send({ critery: result });
 	})
 };
