@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { bodyValidator } from '../middlewares/validator';
+import { bodyValidator, queryValidator } from '../middlewares/validator';
 import * as yup from 'yup';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
@@ -17,3 +17,19 @@ eventRouter.post('/meet', bodyValidator(yup.object().shape({
 	endsAt: yup.string().required().matches(dateRegex),
 	participants: yup.array().required().min(1)
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventMeet);
+
+//create a event combat
+eventRouter.post('/battle', bodyValidator(yup.object().shape({
+	name: yup.string().required(),
+	description: yup.string().required(),
+	trainer: yup.string().required(),
+	weigthCategory: yup.string().required(),
+	startsAt: yup.string().required().matches(dateRegex),
+	endsAt: yup.string().required().matches(dateRegex),
+	combats: yup.array().required().min(1)
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventBattle);
+
+//get Events
+eventRouter.get('/', queryValidator(yup.object().shape({
+	limit: yup.string()
+}).noUnknown(true)), checkSession, checkAuth([]), eventController.getEvent);

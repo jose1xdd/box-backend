@@ -8,7 +8,7 @@ export class userModel extends Model<IUserDocument> {
 	}
 
 	static getUserById(userId: string){
-		return this.findById(userId, { password: 0, __v: 0 });
+		return this.findById(userId, { password: 0, __v: 0, role: 0 });
 	}
 
 	static getUserListByRole(limit: number = DEFAUL_LIMIT, role: string){
@@ -27,5 +27,9 @@ export class userModel extends Model<IUserDocument> {
 
 	static deleteWeightCategoryFromUser(categoryId: mongoose.Types.ObjectId){
 		return this.updateMany({ weightCategory: categoryId }, { $set: { weightCategory: null } });
+	}
+
+	static getUsersFromList(IdList: [mongoose.Types.ObjectId]){
+		return this.find({ _id: { $in: IdList } }, { password: 0, __v: 0, role: 0 });
 	}
 }
