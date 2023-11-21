@@ -13,4 +13,10 @@ export const roleController = {
 		const result = await Role.create(data);
 		res.send({ role: result });
 	}),
+
+	//get rol
+	getRol: capture(async (req, res)=>{
+		const result = await Role.find({}, { __V: 0 });
+		res.send({ role: result });
+	}),
 };

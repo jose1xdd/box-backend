@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { bodyValidator, queryValidator } from '../middlewares/validator';
+import {
+	bodyValidator,
+	paramsValidator,
+	queryValidator
+} from '../middlewares/validator';
 import * as yup from 'yup';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
@@ -30,6 +34,11 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventBattle);
 
 //get Events
-eventRouter.get('/', queryValidator(yup.object().shape({
+eventRouter.get('/', paramsValidator(yup.object().shape({
 	limit: yup.string()
 }).noUnknown(true)), checkSession, checkAuth([]), eventController.getEvent);
+
+//get Event by Id
+eventRouter.get('/Info', queryValidator(yup.object().shape({
+	eventId: yup.string().required()
+}).noUnknown(true)), checkSession, checkAuth([]), eventController.getEventById);
