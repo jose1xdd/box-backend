@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 	},
 	password: String,
 	role: {
-		type: String,
+		type: mongoose.Schema.Types.Mixed,
 		default: UserDefaultRol
 	},
 	photo: String,

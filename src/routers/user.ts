@@ -45,6 +45,18 @@ userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	address: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTrainer);
 
+//Create generic user
+userRouter.post('/generic', bodyValidator(yup.object().shape({
+	name: yup.string().required(),
+	lastName: yup.string().required(),
+	birthDate: yup.string().required().matches(dateRegex),
+	cedula: yup.string().required(),
+	email: yup.string().required().email(),
+	phone: yup.string().required(),
+	address: yup.string().required(),
+	role: yup.string().required(),
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createGenericUser);
+
 //Update a deportista
 userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
