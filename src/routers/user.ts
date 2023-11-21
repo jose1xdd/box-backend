@@ -32,7 +32,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createAdmin);
+}).noUnknown(true)), userController.createAdmin);
 
 //Create trainer
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
