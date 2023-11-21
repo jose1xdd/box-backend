@@ -6,6 +6,8 @@ import { capture } from '../middlewares/errorhandler';
 import { Club } from '../database/models/club';
 import { WeightCategory } from '../database/models/weightCategory';
 import { DisableUser } from '../database/models/disabledUsers';
+import { Role } from '../database/models/role';
+import { logger } from '../logger/winston';
 export const userController = {
 
 	//create an deportista user
@@ -89,6 +91,29 @@ export const userController = {
 		const result = await User.create(data);
 		result.password = password;
 
+		res.send({ user: result });
+	}),
+
+	//Create an admin
+	createGenericUser: capture(async (req, res)=>{
+		const data = req.body;
+		const roleId = data.role;
+		if(!mongoose.Types.ObjectId.isValid(roleId)) throw Error('El ID del rol no es valido');
+		const existRole = await Role.findById(roleId, { _id: 0, __v: 0 });
+		if (!existRole) throw Error('No existe un rol asociado a  ese id ');
+		//If user its repeat
+		const user = await User.findOne({ $or: [{ email: data.email }, { cedula: data.cedula }] });
+		if (user) throw Error('El usuario ya se encuentra registrado');
+
+		//Encrypt the password
+		const password = crypto.randomBytes(8).toString('hex');
+		data.password = encrypPassword(password);
+		//Asign role
+		data.role = existRole;
+		//create the user
+		const result = await User.create(data);
+		result.password = password;
+		logger.info('Elvin');
 		res.send({ user: result });
 	}),
 
