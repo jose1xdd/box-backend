@@ -8,6 +8,7 @@ import { WeightCategory } from '../database/models/weightCategory';
 import { DisableUser } from '../database/models/disabledUsers';
 import { Role } from '../database/models/role';
 import { logger } from '../logger/winston';
+import { CriterioTest } from '../database/models/criterioTest';
 export const userController = {
 
 	//create an deportista user
@@ -208,5 +209,37 @@ export const userController = {
 			...user.toObject()
 		});
 		res.send({ users: 'Usuario eliminado' });
-	})
+	}),
+
+	//disable an user
+	updateImage: capture(async (req, res)=>{
+		const image = req;
+		logger.info(image);
+		res.send({ users: 'Imagen actualizada' });
+	}),
+
+	//Create an admin
+	createTestUser: capture(async (req, res)=>{
+		const data = req.body;
+		const userId = data.userId;
+		const test = data.test;
+		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
+		const exist = await User.findById(userId);
+		logger.info(exist);
+		if(!exist) throw Error('No existe un usuario asignado a ese id');
+		if(exist.role != 'Deportista') throw Error('No se le puede hace una evaluacion a un usuario no deportista');
+		for(const critery of test){
+			const criteryId = critery.criteryId;
+			if(!mongoose.Types.ObjectId.isValid(criteryId)) throw Error('El id de un criterio no es valido');
+			const existC = await CriterioTest.findById(criteryId);
+			if(!existC) throw Error('No existe un criterio asignado a ese id');
+			delete critery.criteryId;
+			critery.name = existC.name;
+		}
+		delete data.userId;
+		logger.info(data);
+
+		const result = await User.addPhysicalTest(userId, data);
+		res.send({ user: result });
+	}),
 };

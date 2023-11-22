@@ -1,3 +1,4 @@
+
 import { IcriterioTest } from './criterioTest';
 
 export interface Icriterio extends IcriterioTest {
@@ -6,5 +7,5 @@ export interface Icriterio extends IcriterioTest {
 
 export interface IphysicalTest {
     date: Date,
-    test: Icriterio[]
+    test: IcriterioTest[]
 }

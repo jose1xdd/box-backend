@@ -10,7 +10,7 @@ const webTokenShema = new mongoose.Schema<IWebTokenDocument>({
 		expires: '1m'
 	},
 	token: String
-});
+}, { versionKey: false });
 
 webTokenShema.loadClass(webTokenModel);
 export default webTokenShema;
