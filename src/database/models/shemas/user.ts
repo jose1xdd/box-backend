@@ -1,8 +1,23 @@
 import mongoose from 'mongoose';
-import { IUserDocument } from '../../../types/user';
+import { IUserDocument, Iranking } from '../../../types/user';
 import { UserDefaultRol } from '../../../codeUtils/globals';
 import { physicalTestSchema } from '../../../controllers/global';
 import { userModel } from '../static/user';
+
+const rankingSchema = new mongoose.Schema<Iranking>({
+	win: {
+		type: Number,
+		default: 0
+	},
+	lose: {
+		type: Number,
+		default: 0
+	},
+	draw: {
+		type: Number,
+		default: 0
+	}
+}, { _id: false });
 
 const userSchema = new mongoose.Schema<IUserDocument>({
 	name: String,
@@ -30,6 +45,13 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 		type: String,
 		default(this: IUserDocument) {
 			if (this.role === 'Deportista') return null;
+			return undefined;
+		},
+	},
+	ranking: {
+		type: rankingSchema,
+		default(this: IUserDocument) {
+			if (this.role === 'Deportista') return { win: 0, lose: 0, draw: 0 };
 			return undefined;
 		},
 	},

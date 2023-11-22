@@ -14,8 +14,8 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
-	cedula: yup.string().required(),
-	weight: yup.number().required(),
+	cedula: yup.string().required().min(0),
+	weight: yup.number().required().min(0),
 	email: yup.string().required().email(),
 	club: yup.string(),
 	weightCategory: yup.string(),
@@ -28,7 +28,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
-	cedula: yup.string().required(),
+	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
@@ -39,7 +39,7 @@ userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
-	cedula: yup.string().required(),
+	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
@@ -50,7 +50,7 @@ userRouter.post('/generic', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
 	birthDate: yup.string().required().matches(dateRegex),
-	cedula: yup.string().required(),
+	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
@@ -65,7 +65,7 @@ userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
-	weight: yup.number(),
+	weight: yup.number().min(0),
 	club: yup.string(),
 	weightCategory: yup.string()
 }).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateDeportista);
@@ -102,6 +102,12 @@ userRouter.post('/test', bodyValidator(yup.object().shape({
 	date: yup.string().required().matches(dateRegex),
 	test: yup.array().of(yup.object().shape({
 		criteryId: yup.string().required(),
-		repeats: yup.number().required()
+		repeats: yup.number().required().min(0)
 	})).required()
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTestUser);
+
+//download user deportistas
+userRouter.get('/download/Deportistas', userController.descargarUserDeportistas);
+
+//download user entrenador
+userRouter.get('/download/Entrenador', userController.descargarUserEntrenadores);

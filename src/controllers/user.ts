@@ -9,6 +9,7 @@ import { DisableUser } from '../database/models/disabledUsers';
 import { Role } from '../database/models/role';
 import { logger } from '../logger/winston';
 import { CriterioTest } from '../database/models/criterioTest';
+import * as ExcelJS from 'exceljs';
 export const userController = {
 
 	//create an deportista user
@@ -242,4 +243,61 @@ export const userController = {
 		const result = await User.addPhysicalTest(userId, data);
 		res.send({ user: result });
 	}),
+
+	//download deportistas
+	descargarUserDeportistas: capture(async (req, res)=>{
+		const workbook = new ExcelJS.Workbook();
+		const sheet = workbook.addWorksheet('usuario');
+		const users = await User.getUserListByRole(undefined, 'Deportista');
+		sheet.addRow(['NAME', 'LASTNAME', 'BIRTHDATE', 'CEDULA', 'EMAIL', 'WEIGTH', 'CATEGORIA', 'PHONE', 'ADDRESS', 'ROLE', 'CLUB']);
+		for(const user of users) {
+			const data: any = [];
+			data.push(user.name);
+			data.push(user.lastName);
+			const birthdate = user.birthDate;
+			data.push(birthdate.getDay() + '-' + (birthdate.getMonth() + 1) + '-' + birthdate.getFullYear());
+			data.push(user.cedula);
+			data.push(user.email);
+			data.push(user.weight);
+			const weightCategory = await WeightCategory.findById(user.weightCategory);
+			if(!weightCategory) data.push('N/A');
+			else data.push(weightCategory.name);
+			data.push(user.phone);
+			data.push(user.address);
+			data.push(user.role);
+			const club = await Club.findById(user.club);
+			if(!club) data.push('N/A');
+			else data.push(club.name);
+			sheet.addRow(data);
+		}
+		res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		res.setHeader('Content-Disposition', 'attachment; filename="Entrenadores_Reporte_' + Date.now() as string + '.xlsx"');
+		await workbook.xlsx.write(res);
+		res.send();
+	}),
+
+	//download entrenadores
+	descargarUserEntrenadores: capture(async (req, res)=>{
+		const workbook = new ExcelJS.Workbook();
+		const sheet = workbook.addWorksheet('usuario');
+		const users = await User.getUserListByRole(undefined, 'Entrenador');
+		sheet.addRow(['NAME', 'LASTNAME', 'BIRTHDATE', 'CEDULA', 'EMAIL', 'PHONE', 'ADDRESS', 'ROLE']);
+		for(const user of users) {
+			const data: any = [];
+			data.push(user.name);
+			data.push(user.lastName);
+			const birthdate = user.birthDate;
+			data.push(birthdate.getDay() + '-' + (birthdate.getMonth() + 1) + '-' + birthdate.getFullYear());
+			data.push(user.cedula);
+			data.push(user.email);
+			data.push(user.phone);
+			data.push(user.address);
+			data.push(user.role);
+			sheet.addRow(data);
+		}
+		res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		res.setHeader('Content-Disposition', 'attachment; filename="Deportistas_Reporte_' + Date.now() as string + '.xlsx"');
+		await workbook.xlsx.write(res);
+		res.send();
+	})
 };
