@@ -62,7 +62,7 @@ userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), bodyValidator(yup.object().shape({
 	name: yup.string(),
-	lastname: yup.string(),
+	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
 	weight: yup.number(),
@@ -75,7 +75,7 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), bodyValidator(yup.object().shape({
 	name: yup.string(),
-	lastname: yup.string(),
+	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
 }).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateUser);
