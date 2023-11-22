@@ -24,7 +24,7 @@ const eventSchema = new mongoose.Schema<IeventDocument>({
 			return undefined;
 		},
 	}
-});
+}, { versionKey: false });
 
 eventSchema.loadClass(eventModel);
 export default eventSchema;
