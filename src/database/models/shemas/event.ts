@@ -18,7 +18,7 @@ const eventSchema = new mongoose.Schema<IeventDocument>({
 	startsAt: Date,
 	endsAt: Date,
 	participants: {
-		type: [mongoose.Types.ObjectId],
+		type: mongoose.Schema.Types.Mixed,
 		default(this: IeventDocument) {
 			if (this.type === 'Reunion') return [];
 			return undefined;

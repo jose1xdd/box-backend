@@ -124,7 +124,7 @@ export const userController = {
 		//If user id is not valid
 		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
 		const user = await User.getUserById(userId);
-
+		if(!user) throw Error('No hay un usuario registrado a ese Id');
 		//Valid the club id
 		let club;
 		if(data.club){
@@ -142,7 +142,7 @@ export const userController = {
 		}
 
 		const result = await User.updateUser(userId, data);
-
+		logger.info(user);
 		//change the club member
 		if(data.club){
 			if(data.club != user.club){
