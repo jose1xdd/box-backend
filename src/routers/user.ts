@@ -105,3 +105,9 @@ userRouter.post('/test', bodyValidator(yup.object().shape({
 		repeats: yup.number().required().min(0)
 	})).required()
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTestUser);
+
+//download user deportistas
+userRouter.get('/download/Deportistas', userController.descargarUserDeportistas);
+
+//download user entrenador
+userRouter.get('/download/Entrenador', userController.descargarUserEntrenadores);
