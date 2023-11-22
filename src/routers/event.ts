@@ -30,7 +30,10 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 	weigthCategory: yup.string().required(),
 	startsAt: yup.string().required().matches(dateRegex),
 	endsAt: yup.string().required().matches(dateRegex),
-	combats: yup.array().required().min(1)
+	combats: yup.array().of(yup.object().shape({
+		boxer1: yup.string().required(),
+		boxer2: yup.string().required()
+	})).required().min(1)
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventBattle);
 
 //get Events
