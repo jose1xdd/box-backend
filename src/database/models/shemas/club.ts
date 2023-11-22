@@ -13,7 +13,7 @@ const clubSchema = new mongoose.Schema<IclubDocument>({
 		type: [],
 		default: []
 	}
-});
+}, { versionKey: false });
 
 clubSchema.loadClass(clubModel);
 export default clubSchema;

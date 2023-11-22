@@ -40,6 +40,6 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 			return undefined;
 		},
 	}
-});
+}, { versionKey: false });
 userSchema.loadClass(userModel);
 export default userSchema;

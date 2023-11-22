@@ -1,6 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import { IUserDocument } from '../../../types/user';
 import { DEFAUL_LIMIT } from '../../../codeUtils/globals';
+import { IphysicalTest } from '../../../types/physicalTest';
 
 export class userModel extends Model<IUserDocument> {
 	static updateUser(userId: string, data: IUserDocument){
@@ -31,5 +32,9 @@ export class userModel extends Model<IUserDocument> {
 
 	static getUsersFromList(IdList: [mongoose.Types.ObjectId]){
 		return this.find({ _id: { $in: IdList } }, { password: 0, __v: 0, role: 0 });
+	}
+
+	static addPhysicalTest(userId: string, test: IphysicalTest){
+		return this.findByIdAndUpdate(userId, { $push: { physicalTest: test } }, { password: 0, __v: 0, role: 0, new: true },);
 	}
 }
