@@ -23,7 +23,7 @@ export const clubsController = {
 		//If club its repeat
 		if(data.name){
 			const exist = await Club.getClubByName(data.name);
-			if(exist) throw Error('Ya hay un club registrado con ese nombre');
+			if(exist && exist._id != clubId) throw Error('Ya hay un club registrado con ese nombre');
 		}
 		//Update the club
 		const club = await Club.updateClub(clubId, data);

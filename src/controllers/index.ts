@@ -45,7 +45,9 @@ export const indexPagController = {
 	deleteSection: capture(async (req, res)=>{
 		const sectionId = req.query.sectionId as string;
 		if(!mongoose.Types.ObjectId.isValid(sectionId)) throw Error('El ID de la seccion no es valido');
+		const index = await Index.findOne();
 		const result = await Index.deleteSection(sectionId);
+		if(index.section.length === result.section.length) throw Error('El ID de esa seccion no se encuentra registrado');
 		res.send({ index: result });
 	}),
 

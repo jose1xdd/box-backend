@@ -32,7 +32,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createAdmin);
+}).noUnknown(true)), userController.createAdmin);
 
 //Create trainer
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
@@ -62,7 +62,7 @@ userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), bodyValidator(yup.object().shape({
 	name: yup.string(),
-	lastname: yup.string(),
+	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
 	weight: yup.number(),
@@ -75,7 +75,7 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), bodyValidator(yup.object().shape({
 	name: yup.string(),
-	lastname: yup.string(),
+	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
 }).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateUser);
