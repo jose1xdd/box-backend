@@ -95,3 +95,13 @@ userRouter.get('/List', queryValidator(yup.object().shape({
 userRouter.delete('/Delete', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.disableUser);
+
+//create test to user
+userRouter.post('/test', bodyValidator(yup.object().shape({
+	userId: yup.string().required(),
+	date: yup.string().required().matches(dateRegex),
+	test: yup.array().of(yup.object().shape({
+		criteryId: yup.string().required(),
+		repeats: yup.number().required()
+	})).required()
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTestUser);

@@ -14,7 +14,7 @@ const combatSchema = new mongoose.Schema<IcombatDocument>({
 		default: 'En espera de resultados'
 	},
 	weigthCategory: mongoose.Schema.Types.Mixed
-});
+}, { versionKey: false });
 
 combatSchema.loadClass(combatModel);
 export default combatSchema;
