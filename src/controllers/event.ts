@@ -10,6 +10,8 @@ export const eventController = {
 	createEventMeet: capture(async (req, res)=>{
 		const data = req.body;
 		data.type = 'Reunion';
+		data.startsAt += ':00.000Z';
+		data.endsAt += ':00.000Z';
 		const startsAt = data.startsAt;
 		const endsAt = data.endsAt;
 		const trainerId = data.trainer as string;
@@ -30,6 +32,8 @@ export const eventController = {
 		const data = req.body;
 		data.type = 'Combate';
 		const category = data.weigthCategory;
+		data.startsAt += ':00.000Z';
+		data.endsAt += ':00.000Z';
 		const startsAt = data.startsAt;
 		const endsAt = data.endsAt;
 		const trainerId = data.trainer as string;
@@ -53,8 +57,15 @@ export const eventController = {
 	//get events
 	getEvent: capture(async (req, res)=>{
 		let limit = DEFAUL_LIMIT;
-		if(req.query.limit) limit = parseInt(req.query.limit as string);
-		const result = await Event.getEvents(limit);
+		const data = req.query;
+		let startsAt;
+		let endsAt;
+		if(data.startsAt) startsAt = new Date(data.startsAt as string + 'T00:00:00.000Z');
+		if(data.endsAt) endsAt = new Date(data.endsAt as string + 'T00:00:00.000Z');
+		if(typeof startsAt != typeof endsAt) throw Error('Se han enviado fechas de busqueda imcompletas');
+		if(startsAt && endsAt && (startsAt > endsAt)) throw Error('No se admite startAt despues de endAt');
+		if(data.limit) limit = parseInt(req.query.limit as string);
+		const result = await Event.getEvents(limit, startsAt, endsAt);
 		for (const event of result) {
 			if(event.type == 'Reunion'){
 				event.participants = await User.getUsersFromList(event.participants);

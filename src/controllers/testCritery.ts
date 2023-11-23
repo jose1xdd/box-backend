@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { CriterioTest } from '../database/models/criterioTest';
 import { capture } from '../middlewares/errorhandler';
-import { logger } from '../logger/winston';
 export const testCriteryController = {
 
 	//create a test critery
@@ -18,7 +17,6 @@ export const testCriteryController = {
 	//delete a test critery
 	deleteCritery: capture(async (req, res)=>{
 		const criteryId = req.query.criteryId as string;
-		logger.info(criteryId);
 		if(!mongoose.Types.ObjectId.isValid(criteryId)) throw Error('El ID del criterio no es valido');
 		const critery = await CriterioTest.findById(criteryId);
 		if(!critery) throw Error('No existe un criterio asociado a ese ID');
