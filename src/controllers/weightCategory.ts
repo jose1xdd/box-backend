@@ -2,7 +2,6 @@
 import mongoose from 'mongoose';
 import { WeightCategory } from '../database/models/weightCategory';
 import { capture } from '../middlewares/errorhandler';
-import { logger } from '../logger/winston';
 import { User } from '../database/models/user';
 export const weightCategoryController = {
 
@@ -55,13 +54,11 @@ export const weightCategoryController = {
 		const maxWeight = parseInt(data.maxWeight);
 
 		//If weightCategoryId is valid
-		logger.info(data);
 		if(!mongoose.Types.ObjectId.isValid(weightCategoryId)) throw Error('El ID de la categoria de peso no es valido');
 		//If weight is not valid
 		if(minWeight >= maxWeight) throw Error('El peso minimo no puede ser mayor al maximo');
 		//If exist weight category already
 		const exist = await WeightCategory.existWeightCategory(data);
-		logger.info(!exist);
 		if(exist && exist._id != weightCategoryId) throw Error('Ya existe una categoria de peso con alguna de esas caracteriticas [nombre, minWeight, maxWeight]');
 		//If category not exist
 		const result = await WeightCategory.findOneAndUpdate({ _id: weightCategoryId }, data, { new: true });
