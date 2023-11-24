@@ -7,7 +7,6 @@ import { Club } from '../database/models/club';
 import { WeightCategory } from '../database/models/weightCategory';
 import { DisableUser } from '../database/models/disabledUsers';
 import { Role } from '../database/models/role';
-import { logger } from '../logger/winston';
 import { CriterioTest } from '../database/models/criterioTest';
 import * as ExcelJS from 'exceljs';
 export const userController = {
@@ -115,7 +114,6 @@ export const userController = {
 		//create the user
 		const result = await User.create(data);
 		result.password = password;
-		logger.info('Elvin');
 		res.send({ user: result });
 	}),
 
@@ -144,7 +142,6 @@ export const userController = {
 		}
 
 		const result = await User.updateUser(userId, data);
-		logger.info(user);
 		//change the club member
 		if(data.club){
 			if(data.club != user.club){
@@ -212,13 +209,6 @@ export const userController = {
 		res.send({ users: 'Usuario eliminado' });
 	}),
 
-	//disable an user
-	updateImage: capture(async (req, res)=>{
-		const image = req;
-		logger.info(image);
-		res.send({ users: 'Imagen actualizada' });
-	}),
-
 	//Create an admin
 	createTestUser: capture(async (req, res)=>{
 		const data = req.body;
@@ -226,7 +216,6 @@ export const userController = {
 		const test = data.test;
 		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
 		const exist = await User.findById(userId);
-		logger.info(exist);
 		if(!exist) throw Error('No existe un usuario asignado a ese id');
 		if(exist.role != 'Deportista') throw Error('No se le puede hace una evaluacion a un usuario no deportista');
 		for(const critery of test){
@@ -238,7 +227,6 @@ export const userController = {
 			critery.name = existC.name;
 		}
 		delete data.userId;
-		logger.info(data);
 
 		const result = await User.addPhysicalTest(userId, data);
 		res.send({ user: result });
