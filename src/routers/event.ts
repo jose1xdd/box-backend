@@ -38,7 +38,9 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 
 //get Events
 eventRouter.get('/', paramsValidator(yup.object().shape({
-	limit: yup.string()
+	limit: yup.string(),
+	startsAt: yup.string().matches(dateRegex),
+	endsAt: yup.string().matches(dateRegex),
 }).noUnknown(true)), checkSession, checkAuth([]), eventController.getEvent);
 
 //get Event by Id

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { userController } from '../controllers/user';
 import { bodyValidator, queryValidator } from '../middlewares/validator';
 import * as yup from 'yup';
-import { dateRegex } from '../codeUtils/globals';
+import { birthDateRegex, dateRegex } from '../codeUtils/globals';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
 import { checkEditPermition } from '../middlewares/checkEditPermisions';
@@ -13,7 +13,7 @@ export const userRouter = Router({ mergeParams: true });
 userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
-	birthDate: yup.string().required().matches(dateRegex),
+	birthDate: yup.string().required().matches(birthDateRegex),
 	cedula: yup.string().required().min(0),
 	weight: yup.number().required().min(0),
 	email: yup.string().required().email(),
@@ -27,7 +27,7 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
-	birthDate: yup.string().required().matches(dateRegex),
+	birthDate: yup.string().required().matches(birthDateRegex),
 	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
@@ -38,7 +38,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
-	birthDate: yup.string().required().matches(dateRegex),
+	birthDate: yup.string().required().matches(birthDateRegex),
 	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
@@ -49,7 +49,7 @@ userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 userRouter.post('/generic', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	lastName: yup.string().required(),
-	birthDate: yup.string().required().matches(dateRegex),
+	birthDate: yup.string().required().matches(birthDateRegex),
 	cedula: yup.string().required().min(0),
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
