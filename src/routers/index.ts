@@ -18,5 +18,5 @@ mainRouter.use('/indexPag', indexPagRouter);
 mainRouter.use('/role', roleRouter);
 mainRouter.use('/event', eventRouter);
 mainRouter.get('/', (req, res)=>{
-	res.send('API BOX V1 ');
+	res.send('API BOX V1.0 ');
 });
