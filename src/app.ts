@@ -7,11 +7,7 @@ import cors from 'cors';
 configDotenv();
 connection();
 const app = express();
-app.use(cors(
-	{
-		origin: 'https://deportnortbox-api.ddns.net'
-	}
-));
+app.use(cors());
 app.use(express.json());
 app.listen(8020, ()=>{
 	logger.info('Servidor Corriendo en el Puerto 8020 ');
