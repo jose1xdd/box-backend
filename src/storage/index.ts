@@ -20,6 +20,8 @@ const storage = multer.diskStorage({
 		cb(null, file.originalname);
 	},
 });
+export const upload = multer({ storage });
+
 export function emptyUploadFolder() {
 	const folderPath = `${__dirname}/../uploads`;
 	fs.readdir(folderPath, (err, filesD) => {
@@ -29,11 +31,28 @@ export function emptyUploadFolder() {
 		});
 	});
 }
+export async function getGameFieldImage(userId: string) {
+	const folderPath = `user/${userId}`;
+	const [files] = await storageBucket.getFiles({
+		prefix: folderPath,
+	});
+	const signedUrls: string[] = [];
+	const expirationDate = new Date();
+	expirationDate.setMinutes(expirationDate.getMinutes() + 30);
+	for (const file of files) {
+		const [signedUrl] = await file.getSignedUrl({
+			action: 'read',
+			expires: expirationDate,
+		});
+		signedUrls.push(signedUrl);
+	}
 
+	return signedUrls;
+}
 export async function saveUserImages(file, userId) {
 	const extension = path.extname(file.originalname);
 	const nombreAutoGenerado = `${file.fieldname}-${Date.now()}`;
-	const remoteFilePath = `game-field/${userId}/${nombreAutoGenerado}${extension}`;
+	const remoteFilePath = `user/${userId}/${nombreAutoGenerado}${extension}`;
 
 	const storageFile = storageBucket.file(remoteFilePath);
 	const blobStream = storageFile.createWriteStream({
@@ -48,4 +67,14 @@ export async function saveUserImages(file, userId) {
 	const readStream = fs.createReadStream(file.path);
 	readStream.pipe(blobStream);
 }
-export const upload = multer({ storage });
+export async function validateGameFieldImages(gameFieldId: string) {
+	const folderPath = `game-field/${gameFieldId}`;
+	const [files] = await storageBucket.getFiles({
+		prefix: folderPath,
+	});
+	if (files.length >= 1) {
+		for (const file of files) {
+			await file.delete();
+		}
+	}
+}
