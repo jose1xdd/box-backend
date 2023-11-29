@@ -32,6 +32,6 @@ export const loginController = {
 			};
 			token = await WebToken.create(data);
 		}
-		res.send({ token: encrypt(token.token), userId: user.id });
+		res.send({ token: encrypt(token.token), userId: user.id, role: user.role });
 	})
 };
