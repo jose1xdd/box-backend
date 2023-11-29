@@ -5,3 +5,4 @@ export const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^
 export const UserDefaultRol = 'Deportista';
 export const DEFAUL_LIMIT = 20;
 export const DEAFUL_PERMISSIONS = 'Generic';
+export const COMBATSTATUS = ['winner', 'draw'];
