@@ -10,46 +10,62 @@ export const eventController = {
 	createEventMeet: capture(async (req, res)=>{
 		const data = req.body;
 		data.type = 'Reunion';
+		//setear la fecha
 		data.startsAt += ':00.000Z';
 		data.endsAt += ':00.000Z';
-		const startsAt = data.startsAt;
-		const endsAt = data.endsAt;
+		const startsAt = new Date (data.date as string + 'T' + data.startsAt as string);
+		const endsAt = new Date (data.date + 'T' + data.endsAt);
 		const trainerId = data.trainer as string;
+		//comprobar las fechas
 		if(startsAt > endsAt) throw Error('La fecha de inicio no puede ser mayor a la final');
+		//comprobar entrenador
 		if(!mongoose.Types.ObjectId.isValid(trainerId)) throw Error('El ID del entrenador no es valido');
 		const participants = data.participants;
 		for (const participant of participants) {
 			if(!mongoose.Types.ObjectId.isValid(participant)) throw Error('El ID del un participante no es valido');
 		}
+		//comprobar si existe otro evento
 		const exist = await Event.getEventByDate(startsAt, endsAt);
 		if(exist) throw Error('Ya exsite un evento en esa fecha');
+		//setear la informacion
+		data.startsAt = startsAt;
+		data.endsAt = endsAt;
 		const result = await Event.create(data);
-		res.send({ role: result });
+		res.send({ event: result });
 	}),
 
-	//create a meet event
+	//create a battle event
 	createEventBattle: capture(async (req, res)=>{
 		const data = req.body;
 		data.type = 'Combate';
 		const category = data.weigthCategory;
+		//setear la fecha
 		data.startsAt += ':00.000Z';
 		data.endsAt += ':00.000Z';
-		const startsAt = data.startsAt;
-		const endsAt = data.endsAt;
+		const startsAt = new Date (data.date as string + 'T' + data.startsAt as string);
+		const endsAt = new Date (data.date + 'T' + data.endsAt);
 		const trainerId = data.trainer as string;
+		//comprobar las fechas
 		if(startsAt > endsAt) throw Error('La fecha de inicio no puede ser mayor a la final');
+		//comprobar entrenador
 		if(!mongoose.Types.ObjectId.isValid(trainerId)) throw Error('El ID del entrenador no es valido');
+		//comprobar categoria
 		if(!mongoose.Types.ObjectId.isValid(category)) throw Error('El ID de la categoria no es valido no es valido');
 		const battles = data.combats;
 		for (const battle of battles) {
 			const boxer1 = battle.boxer1;
 			const boxer2 = battle.boxer2;
+			//comprobar deportistas
 			if(!mongoose.Types.ObjectId.isValid(boxer1)) throw Error('El ID del un participante no es valido');
 			if(!mongoose.Types.ObjectId.isValid(boxer2)) throw Error('El ID del un participante no es valido');
 			if(boxer1 == boxer2) throw Error('No puede existir una pelea entre una misma persona (ID repetido)');
 		}
+		//comprobar existe evento
 		const exist = await Event.getEventByDate(startsAt, endsAt);
 		if(exist) throw Error('Ya exsite un evento en esa fecha');
+		//setear la informacion
+		data.startsAt = startsAt;
+		data.endsAt = endsAt;
 		const result = await Event.create(data);
 		res.send({ role: result });
 	}),

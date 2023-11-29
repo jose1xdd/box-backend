@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
 import { eventController } from '../controllers/event';
-import { dateRegex } from '../codeUtils/globals';
+import { dateRegex, timeRegex } from '../codeUtils/globals';
 
 export const eventRouter = Router({ mergeParams: true });
 
@@ -17,8 +17,9 @@ eventRouter.post('/meet', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	description: yup.string().required(),
 	trainer: yup.string().required(),
-	startsAt: yup.string().required().matches(dateRegex),
-	endsAt: yup.string().required().matches(dateRegex),
+	date: yup.string().required().matches(dateRegex),
+	startsAt: yup.string().required().matches(timeRegex),
+	endsAt: yup.string().required().matches(timeRegex),
 	participants: yup.array().required().min(1)
 }).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventMeet);
 
@@ -28,8 +29,9 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 	description: yup.string().required(),
 	trainer: yup.string().required(),
 	weigthCategory: yup.string().required(),
-	startsAt: yup.string().required().matches(dateRegex),
-	endsAt: yup.string().required().matches(dateRegex),
+	date: yup.string().required().matches(dateRegex),
+	startsAt: yup.string().required().matches(timeRegex),
+	endsAt: yup.string().required().matches(timeRegex),
 	combats: yup.array().of(yup.object().shape({
 		boxer1: yup.string().required(),
 		boxer2: yup.string().required()
