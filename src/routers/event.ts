@@ -8,7 +8,11 @@ import * as yup from 'yup';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
 import { eventController } from '../controllers/event';
-import { dateRegex, timeRegex } from '../codeUtils/globals';
+import {
+	COMBATSTATUS,
+	dateRegex,
+	timeRegex
+} from '../codeUtils/globals';
 
 export const eventRouter = Router({ mergeParams: true });
 
@@ -49,3 +53,13 @@ eventRouter.get('/', paramsValidator(yup.object().shape({
 eventRouter.get('/Info', queryValidator(yup.object().shape({
 	eventId: yup.string().required()
 }).noUnknown(true)), checkSession, checkAuth([]), eventController.getEventById);
+
+//set event results
+eventRouter.patch('/result', bodyValidator(yup.object().shape({
+	eventId: yup.string().required(),
+	combats: yup.array().of(yup.object().shape({
+		battleId: yup.string().required(),
+		status: yup.string().required().oneOf(COMBATSTATUS),
+		winner: yup.string()
+	})).required().min(1)
+}).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.setEventResult);
