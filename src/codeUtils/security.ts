@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import JSEncrypt from 'node-jsencrypt';
-import { publicKey, privateKey } from '../Auth/Keys';
+import { publicKey, privateKey } from '../auth/Keys';
 export const encrypPassword = (password) => {
 	const hash = crypto.createHash('sha256');
 	hash.update(password);

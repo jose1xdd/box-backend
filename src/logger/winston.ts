@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import winston, { format } from 'winston';
+import { inspect as insp } from 'util';
 
 // Formato personalizado para objetos
 const customObjectFormat = format((info) => {
@@ -31,3 +32,5 @@ export const logger = winston.createLogger({
 	),
 	transports: [new winston.transports.Console()],
 });
+
+export const inspect = (data) => logger.info(insp(data, false, 15));
