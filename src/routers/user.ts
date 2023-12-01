@@ -83,7 +83,7 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 //get an user by id
 userRouter.get('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUser);
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores', 'Deportista']), userController.getUser);
 
 //get the user List
 userRouter.get('/List', queryValidator(yup.object().shape({
