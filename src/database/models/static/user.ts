@@ -12,6 +12,10 @@ export class userModel extends Model<IUserDocument> {
 		return this.findById(userId, { password: 0, __v: 0, role: 0 });
 	}
 
+	static getUserByEmail(email: string){
+		return this.findOne({ email: email }, { password: 0, __v: 0, role: 0 });
+	}
+
 	static getUserListByRole(limit: number = DEFAUL_LIMIT, role: string){
 		let roles = {};
 		const constrains = {

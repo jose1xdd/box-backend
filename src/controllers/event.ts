@@ -22,9 +22,11 @@ export const eventController = {
 		//comprobar entrenador
 		if(!mongoose.Types.ObjectId.isValid(trainerId)) throw Error('El ID del entrenador no es valido');
 		const participants = data.participants;
+		const users:string[] = [];
 		for (const participant of participants) {
-			if(!mongoose.Types.ObjectId.isValid(participant)) throw Error('El ID del un participante no es valido');
+			users.push((await User.getUserByEmail(participant))._id);
 		}
+		data.participants = users;
 		//comprobar si existe otro evento
 		const exist = await Event.getEventByDate(startsAt, endsAt);
 		if(exist) throw Error('Ya exsite un evento en esa fecha');
