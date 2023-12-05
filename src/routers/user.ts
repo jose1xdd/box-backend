@@ -83,13 +83,13 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 //get an user by id
 userRouter.get('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores', 'Deportista']), userController.getUser);
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador', 'Deportista']), userController.getUser);
 
 //get the user List
 userRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
 	role: yup.string()
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenadores']), userController.getUsersList);
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), userController.getUsersList);
 
 //disable an user
 userRouter.delete('/Delete', queryValidator(yup.object().shape({
