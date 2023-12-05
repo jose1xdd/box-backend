@@ -25,7 +25,7 @@ eventRouter.post('/meet', bodyValidator(yup.object().shape({
 	startsAt: yup.string().required().matches(timeRegex),
 	endsAt: yup.string().required().matches(timeRegex),
 	participants: yup.array().required().min(1)
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventMeet);
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventMeet);
 
 //create a event combat
 eventRouter.post('/battle', bodyValidator(yup.object().shape({
@@ -40,7 +40,7 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 		boxer1: yup.string().required(),
 		boxer2: yup.string().required()
 	})).required().min(1)
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.createEventBattle);
+}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventBattle);
 
 //get Events
 eventRouter.get('/', paramsValidator(yup.object().shape({
