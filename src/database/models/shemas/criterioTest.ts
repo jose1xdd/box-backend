@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IcriterioTestDocument, IcriterioTestuser } from '../../../types/criterioTest';
 import { criterioTestModel } from '../static/criterioTest';
 
 export const criterioSchemaTestUser = new mongoose.Schema<IcriterioTestuser>({

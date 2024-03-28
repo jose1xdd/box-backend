@@ -1,5 +1,4 @@
 import { Model } from 'mongoose'; '../../../types/weightCategory';
-import { Iindex, Iseccion } from '../../../types/globals';
 
 export class indexModel extends Model<Iindex> {
 	static async addSection(data: Iseccion){

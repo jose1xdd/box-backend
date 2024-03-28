@@ -3,6 +3,7 @@ import { storages } from './firebase';
 import path from 'path';
 import fs from 'fs';
 import { logger } from '../logger/winston';
+import { allowedExtensions } from '../codeUtils/globals';
 
 export const storageBucket = storages.bucket();
 
@@ -31,14 +32,14 @@ export function emptyUploadFolder() {
 		});
 	});
 }
-export async function getGameFieldImage(userId: string) {
+export async function getUserImage(userId: string) {
 	const folderPath = `user/${userId}`;
 	const [files] = await storageBucket.getFiles({
 		prefix: folderPath,
 	});
 	const signedUrls: string[] = [];
 	const expirationDate = new Date();
-	expirationDate.setMinutes(expirationDate.getMinutes() + 30);
+	expirationDate.setMinutes(expirationDate.getMinutes() + 2);
 	for (const file of files) {
 		const [signedUrl] = await file.getSignedUrl({
 			action: 'read',
@@ -51,6 +52,9 @@ export async function getGameFieldImage(userId: string) {
 }
 export async function saveUserImages(file, userId) {
 	const extension = path.extname(file.originalname);
+	if(!allowedExtensions.includes(extension)){
+		throw new Error('Formato de imagen no permitido');
+	}
 	const nombreAutoGenerado = `${file.fieldname}-${Date.now()}`;
 	const remoteFilePath = `user/${userId}/${nombreAutoGenerado}${extension}`;
 
@@ -67,8 +71,8 @@ export async function saveUserImages(file, userId) {
 	const readStream = fs.createReadStream(file.path);
 	readStream.pipe(blobStream);
 }
-export async function validateGameFieldImages(gameFieldId: string) {
-	const folderPath = `game-field/${gameFieldId}`;
+export async function validateUserImages(userId: string) {
+	const folderPath = `user/${userId}`;
 	const [files] = await storageBucket.getFiles({
 		prefix: folderPath,
 	});

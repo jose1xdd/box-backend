@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IWebTokenDocument } from '../../../types/webToken';
 import { webTokenModel } from '../static/webToken';
 
 const webTokenShema = new mongoose.Schema<IWebTokenDocument>({

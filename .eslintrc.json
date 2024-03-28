@@ -18,6 +18,13 @@
     "import-newlines"
   ],
   "rules": {
+    "prefer-destructuring": [
+      "error",
+      {
+        "object": true,
+        "array": false
+      }
+    ],
     "indent": [
       "error",
       "tab"

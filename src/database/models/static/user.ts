@@ -1,7 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import { IUserDocument } from '../../../types/user';
 import { DEFAUL_LIMIT } from '../../../codeUtils/globals';
-import { IphysicalTest } from '../../../types/physicalTest';
 
 export class userModel extends Model<IUserDocument> {
 	static updateUser(userId: string, data: IUserDocument){

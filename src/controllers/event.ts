@@ -21,7 +21,7 @@ export const eventController = {
 		if(startsAt > endsAt) throw Error('La fecha de inicio no puede ser mayor a la final');
 		//comprobar entrenador
 		if(!mongoose.Types.ObjectId.isValid(trainerId)) throw Error('El ID del entrenador no es valido');
-		const participants = data.participants;
+		const { participants } = data;
 		const users:string[] = [];
 		for (const participant of participants) {
 			users.push((await User.getUserByEmail(participant))._id);
@@ -56,8 +56,8 @@ export const eventController = {
 		if(!mongoose.Types.ObjectId.isValid(category)) throw Error('El ID de la categoria no es valido no es valido');
 		const battles = data.combats;
 		for (const battle of battles) {
-			const boxer1 = battle.boxer1;
-			const boxer2 = battle.boxer2;
+			const { boxer1 } = battle;
+			const { boxer2 } = battle;
 			//comprobar deportistas
 			if(!mongoose.Types.ObjectId.isValid(boxer1)) throw Error('El ID del un participante no es valido');
 			if(!mongoose.Types.ObjectId.isValid(boxer2)) throw Error('El ID del un participante no es valido');
@@ -90,8 +90,8 @@ export const eventController = {
 				event.participants = await User.getUsersFromList(event.participants);
 			}else{
 				for(const battle of event.combats) {
-					const boxer1 = battle.boxer1;
-					const boxer2 = battle.boxer2;
+					const { boxer1 } = battle;
+					const { boxer2 } = battle;
 					battle.boxer1 = await User.getUserById(boxer1);
 					battle.boxer2 = await User.getUserById(boxer2);
 				}
@@ -102,17 +102,17 @@ export const eventController = {
 
 	//get event by Id
 	getEventById: capture(async (req, res)=>{
-		const eventId = req.query.eventId;
+		const { eventId } = req.query;
 		const result = await Event.findById(eventId);
 		if(!result) throw Error('No existe ese evento');
-		const type = result.type;
+		const { type } = result;
 		result.trainer = await User.getUserById(result.trainer);
 		if(type == 'Reunion'){
 			result.participants = await User.getUsersFromList(result.participants);
 		}else{
 			for(const battle of result.combats) {
-				const boxer1 = battle.boxer1;
-				const boxer2 = battle.boxer2;
+				const { boxer1 } = battle;
+				const { boxer2 } = battle;
 				battle.boxer1 = await User.getUserById(boxer1);
 				battle.boxer2 = await User.getUserById(boxer2);
 			}

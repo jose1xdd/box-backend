@@ -7,19 +7,10 @@ import { testCriteryRouter } from './testCritery';
 import { indexPagRouter } from './PagIndex';
 import { roleRouter } from './role';
 import { eventRouter } from './event';
-import { saveUserImages, upload } from '../storage';
-import { logger } from '../logger/winston';
+import { requestUtils } from '../middlewares/requestUtils';
 
 export const mainRouter = express.Router({ mergeParams: true });
-mainRouter.post('/test', upload.array('image'), async (req, res)=>{
-	const files = req.files as Express.Multer.File[];
-	for(const file of files){
-		await saveUserImages(file, '123');
-	}
-	logger.info(files);
-	res.send({ ok: 'ok' });
-
-});
+mainRouter.use(requestUtils);
 mainRouter.use('/users', userRouter);
 mainRouter.use('/login', loginRouter);
 mainRouter.use('/club', clubsRouter);

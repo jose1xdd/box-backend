@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IcombatDocument } from '../../../types/combat';
 import { combatModel } from '../static/combat';
 
 const combatSchema = new mongoose.Schema<IcombatDocument>({

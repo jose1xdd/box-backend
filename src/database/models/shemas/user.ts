@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IUserDocument, Iranking } from '../../../types/user';
 import { UserDefaultRol } from '../../../codeUtils/globals';
 import { physicalTestSchema } from '../../../controllers/global';
 import { userModel } from '../static/user';

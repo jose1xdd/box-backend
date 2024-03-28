@@ -9,6 +9,13 @@ import { DisableUser } from '../database/models/disabledUsers';
 import { Role } from '../database/models/role';
 import { CriterioTest } from '../database/models/criterioTest';
 import * as ExcelJS from 'exceljs';
+import {
+	emptyUploadFolder,
+	getUserImage,
+	saveUserImages,
+	validateUserImages
+} from '../storage';
+import { checkEditPermition } from '../codeUtils/checkEditPermisions';
 export const userController = {
 
 	//create an deportista user
@@ -121,6 +128,7 @@ export const userController = {
 	updateDeportista: capture(async (req, res)=>{
 		const userId = req.query.userId as string;
 		const data = req.body;
+		checkEditPermition(req.getUser(), userId);
 		//If user id is not valid
 		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
 		const user = await User.getUserById(userId);
@@ -164,6 +172,7 @@ export const userController = {
 	//update an user
 	updateUser: capture(async (req, res)=>{
 		const userId = req.query.userId as string;
+		checkEditPermition(req.getUser(), userId);
 		const data = req.body;
 		//If user id is not valid
 		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
@@ -212,14 +221,14 @@ export const userController = {
 	//Create an admin
 	createTestUser: capture(async (req, res)=>{
 		const data = req.body;
-		const userId = data.userId;
-		const test = data.test;
+		const { userId } = data;
+		const { test } = data;
 		if(!mongoose.Types.ObjectId.isValid(userId)) throw Error('El ID del usuario no es valido');
 		const exist = await User.findById(userId);
 		if(!exist) throw Error('No existe un usuario asignado a ese id');
 		if(exist.role != 'Deportista') throw Error('No se le puede hace una evaluacion a un usuario no deportista');
 		for(const critery of test){
-			const criteryId = critery.criteryId;
+			const { criteryId } = critery;
 			if(!mongoose.Types.ObjectId.isValid(criteryId)) throw Error('El id de un criterio no es valido');
 			const existC = await CriterioTest.findById(criteryId);
 			if(!existC) throw Error('No existe un criterio asignado a ese id');
@@ -287,5 +296,27 @@ export const userController = {
 		res.setHeader('Content-Disposition', 'attachment; filename="Deportistas_Reporte_' + Date.now() as string + '.xlsx"');
 		await workbook.xlsx.write(res);
 		res.send();
+	}),
+	uploadProfilePhoto: capture(async (req, res)=>{
+		const { userId } = req.params;
+		checkEditPermition(req.getUser(), userId);
+		if(req.getUserId() !== userId){
+			const user = await User.findById(userId);
+			if(!user)throw new Error('El usuario a modificar no existe');
+		}
+		const files = req.files as Express.Multer.File[];
+		await validateUserImages(userId);
+		for(const file of files){
+			await saveUserImages(file, userId);
+		}
+		emptyUploadFolder();
+		res.send({});
+	}),
+	getProfilePhoto: capture(async (req, res)=>{
+		const { userId } = req.params;
+		const user = await User.findById(userId);
+		if(!user)throw new Error('El usuario del cual se quiere consultar la foto no existe');
+		const result = await getUserImage(userId);
+		res.send({ image: result[0] });
 	})
 };

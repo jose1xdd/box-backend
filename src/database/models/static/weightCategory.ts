@@ -1,11 +1,10 @@
 import { Model } from 'mongoose';
-import { IweightCategoryDocument } from '../../../types/weightCategory';
 
 export class weightCategoryModel extends Model<IweightCategoryDocument> {
 	static existWeightCategory(data: IweightCategoryDocument){
-		const name = data.name;
-		const minWeight = data.minWeight;
-		const maxWeight = data.maxWeight;
+		const { name } = data;
+		const { minWeight } = data;
+		const { maxWeight } = data;
 		const constrains = {
 			$or: [
 				{ 'name': name },
@@ -21,8 +20,8 @@ export class weightCategoryModel extends Model<IweightCategoryDocument> {
 	}
 
 	static getWeightCategoriesByWeight(data){
-		const minWeight = data.minWeight;
-		const maxWeight = data.maxWeight;
+		const { minWeight } = data;
+		const { maxWeight } = data;
 		let constrains = {};
 		if(minWeight) {
 			constrains = { $and: [

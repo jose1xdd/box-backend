@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import { userController } from '../controllers/user';
-import { bodyValidator, queryValidator } from '../middlewares/validator';
+import {
+	bodyValidator,
+	paramsValidator,
+	queryValidator
+} from '../middlewares/validator';
 import * as yup from 'yup';
 import { birthDateRegex, dateRegex } from '../codeUtils/globals';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
-import { checkEditPermition } from '../middlewares/checkEditPermisions';
+import { upload } from '../storage';
 
 export const userRouter = Router({ mergeParams: true });
 
@@ -68,7 +72,7 @@ userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	weight: yup.number().min(0),
 	club: yup.string(),
 	weightCategory: yup.string()
-}).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateDeportista);
+}).noUnknown(true)), checkSession, checkAuth([]), userController.updateDeportista);
 
 //Update an generic User
 userRouter.patch('/', queryValidator(yup.object().shape({
@@ -78,7 +82,7 @@ userRouter.patch('/', queryValidator(yup.object().shape({
 	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
-}).noUnknown(true)), checkSession, checkAuth([]), checkEditPermition, userController.updateUser);
+}).noUnknown(true)), checkSession, checkAuth([]), userController.updateUser);
 
 //get an user by id
 userRouter.get('/', queryValidator(yup.object().shape({
@@ -111,3 +115,21 @@ userRouter.get('/download/Deportistas', userController.descargarUserDeportistas)
 
 //download user entrenador
 userRouter.get('/download/Entrenador', userController.descargarUserEntrenadores);
+
+userRouter.post('/:userId/uploadImage',
+	checkSession,
+	checkAuth(['Admin', 'Entrenador', 'Deportista']),
+	paramsValidator(yup.object().shape({
+		userId: yup.string().required()
+	}).noUnknown(true)),
+	upload.array('image'),
+	userController.uploadProfilePhoto);
+
+userRouter.get('/:userId/getUserImage',
+	checkSession,
+	checkAuth(['Admin', 'Entrenador', 'Deportista']),
+	paramsValidator(yup.object().shape({
+		userId: yup.string().required()
+	}).noUnknown(true)),
+	userController.getProfilePhoto
+);

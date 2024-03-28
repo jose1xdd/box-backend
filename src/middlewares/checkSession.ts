@@ -11,6 +11,7 @@ export const checkSession = capture(async (req, res, next) => {
 	const exist = await WebToken.findOne({ token: decrypt(token) });
 	if(!exist) throw Error('La sesion ha acabado, logeate otra vez');
 	const user = await User.findOne({ _id: exist.userId });
+	req.box = { session: { user } };
 	if(!user) throw Error('Ese token no esta asociado a ningun usuario');
 	next();
 });

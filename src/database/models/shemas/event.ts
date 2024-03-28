@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IeventDocument } from '../../../types/event';
 import CombatModel from './combat';
 import { eventModel } from '../static/event';
 

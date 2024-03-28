@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { Iindex, Iseccion } from '../../../types/globals';
 import { indexModel } from '../static';
 
 const seccionShema = new mongoose.Schema<Iseccion>({

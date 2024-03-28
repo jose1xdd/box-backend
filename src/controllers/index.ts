@@ -2,7 +2,6 @@
 import mongoose from 'mongoose';
 import { Index } from '../database/models';
 import { capture } from '../middlewares/errorhandler';
-import { Iseccion } from '../types/globals';
 export const indexPagController = {
 
 	//update mision vision index
@@ -26,7 +25,7 @@ export const indexPagController = {
 		let result;
 		if(index) {
 			if(index.section){
-				const section: Iseccion[] = index.section;
+				const { section } = index;
 				let exist = false;
 				section.forEach((i)=>{
 					const iName = i.name;
