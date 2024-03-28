@@ -16,6 +16,9 @@ import {
 	validateUserImages
 } from '../storage';
 import { checkEditPermition } from '../codeUtils/checkEditPermisions';
+import { Code } from '../database/models/code';
+import { sendEmail } from '../mails';
+import { recoveryPassword } from '../mails/templates';
 export const userController = {
 
 	//create an deportista user
@@ -318,5 +321,24 @@ export const userController = {
 		if(!user)throw new Error('El usuario del cual se quiere consultar la foto no existe');
 		const result = await getUserImage(userId);
 		res.send({ image: result[0] });
+	}),
+	generatePasswordCode: capture(async (req, res)=>{
+		const { email } = req.body;
+		const user = await User.getUserByEmail(email);
+		if(!user) throw new Error('No hay un usuario asociado a ese email');
+		const code = crypto.randomInt(100000, 999999).toString();
+		await Code.createCode(user._id, code);
+		await sendEmail([email], 'Recuperacion de contraseña', recoveryPassword);
+		res.send({});
+	}),
+	updatePassword: capture(async (req, res)=>{
+		const { email, code, password } = req.body;
+		const user = await User.getUserByEmail(email);
+		if(!user) throw new Error('No hay un usuario asociado a ese email');
+		const codeFetched = await Code.fetchCodeByEmail(user._id, code);
+		if(!codeFetched)throw new Error('No hay un codigo para este usuario');
+		const newPassword = encrypPassword(password);
+		await User.updateUser(user._id, { password: newPassword });
+		res.send({});
 	})
 };

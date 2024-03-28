@@ -131,5 +131,20 @@ userRouter.get('/:userId/getUserImage',
 	paramsValidator(yup.object().shape({
 		userId: yup.string().required()
 	}).noUnknown(true)),
-	userController.getProfilePhoto
+	userController.getProfilePhoto);
+
+userRouter.post('/generate-password-code',
+	bodyValidator(yup.object().shape({
+		email: yup.string().email()
+	}).noUnknown(true)),
+	userController.generatePasswordCode
+);
+
+userRouter.patch('/update-password',
+	bodyValidator(yup.object().shape({
+		email: yup.string().email(),
+		code: yup.string(),
+		password: yup.string()
+	})),
+	userController.updatePassword
 );

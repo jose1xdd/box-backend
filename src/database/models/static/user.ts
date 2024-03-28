@@ -2,7 +2,7 @@ import mongoose, { Model } from 'mongoose';
 import { DEFAUL_LIMIT } from '../../../codeUtils/globals';
 
 export class userModel extends Model<IUserDocument> {
-	static updateUser(userId: string, data: IUserDocument){
+	static updateUser(userId: string, data: Partial<IUserDocument>){
 		return this.findByIdAndUpdate(userId, data, { projection: { password: 0, role: 0, __v: 0 }, new: true });
 	}
 
