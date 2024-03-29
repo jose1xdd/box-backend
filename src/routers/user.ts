@@ -161,3 +161,15 @@ userRouter.post('/send-comunicates',
 	checkAuth(['Admin', 'Entrenador']),
 	userController.sendComunicates
 );
+userRouter.post('/upload-masive-sportsman',
+	upload.single('excel'),
+	checkSession,
+	checkAuth(['Admin', 'Entrenador']),
+	userController.uploadMasiveSportman
+);
+userRouter.post('/upload-masive-trainer',
+	upload.single('excel'),
+	checkSession,
+	checkAuth(['Admin', 'Entrenador']),
+	userController.uploadMasiveTrainer
+);

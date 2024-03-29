@@ -19,6 +19,13 @@ import { checkEditPermition } from '../codeUtils/checkEditPermisions';
 import { Code } from '../database/models/code';
 import { sendEmail } from '../mails';
 import { comunicate, recoveryPassword } from '../mails/templates';
+import {
+	expectedHeaders,
+	expectedHeadersTrainer,
+	formatStringdDate
+} from '../codeUtils/globals';
+import { DateTime } from 'luxon';
+import { logger } from '../logger/winston';
 export const userController = {
 
 	//create an deportista user
@@ -307,6 +314,7 @@ export const userController = {
 			const user = await User.findById(userId);
 			if(!user)throw new Error('El usuario a modificar no existe');
 		}
+		if(!req.files) throw new Error('No se envio el archivo');
 		const files = req.files as Express.Multer.File[];
 		await validateUserImages(userId);
 		for(const file of files){
@@ -350,5 +358,84 @@ export const userController = {
 			sendEmail([element], subject, comunicate(subject, message, element));
 		});
 		res.send({});
+	}),
+	uploadMasiveSportman: capture(async (req, res)=>{
+		if(!req.file) throw new Error('No se envio un archivo');
+		const workbook = new ExcelJS.Workbook();
+		await workbook.xlsx.readFile(req.file.path);
+		const worksheet = workbook.worksheets[0];
+
+		const headers:string [] = [];
+		worksheet.getRow(1).eachCell((cell) => {
+			if(cell.value) headers.push(cell.value.toString());
+		});
+
+		const isValid = JSON.stringify(headers) === JSON.stringify(expectedHeaders);
+		if(!isValid) throw new Error('Excel invalido');
+		const users: Partial<Iuser> [] = [];
+		let invalidUsers: string = '';
+
+		worksheet.eachRow({ includeEmpty: false }, async (row)=>{
+			const rowEach = row.values;
+			const user:Partial<Iuser> = { name: rowEach[1], lastName: rowEach[2], birthDate: rowEach[3], cedula: rowEach[4], email: rowEach[5], weight: rowEach[6], phone: rowEach[7], address: rowEach[8] };
+			users.push(user);
+		});
+		users.splice(0, 1);
+		for(const user of users){
+			if(user.email && user.birthDate){
+				const userExist = await User.getUserByEmail(user.email);
+				if(userExist) {
+					invalidUsers += `${user.email}\n`;
+				}
+				else {
+					user.birthDate = DateTime.fromFormat(user.birthDate.toString(), formatStringdDate).toJSDate();
+					user.weight = user.weight as number;
+					await User.create({ ...user });
+				}
+			}
+		}
+		if(invalidUsers.length > 0)res.send({ message: `Los siguientes usuarios no se pudieron registrar, por que sus emails ya estan registrados:\n${invalidUsers}` });
+		else res.send({ message: 'Se agregaron los usuario' });
+		emptyUploadFolder();
+	}),
+	uploadMasiveTrainer: capture(async (req, res)=>{
+		if(!req.file) throw new Error('No se envio un archivo');
+		const workbook = new ExcelJS.Workbook();
+		await workbook.xlsx.readFile(req.file.path);
+		const worksheet = workbook.worksheets[0];
+
+		const headers:string [] = [];
+		worksheet.getRow(1).eachCell((cell) => {
+			if(cell.value) headers.push(cell.value.toString());
+		});
+		logger.warn(headers);
+		logger.warn(expectedHeadersTrainer);
+		const isValid = JSON.stringify(headers) === JSON.stringify(expectedHeadersTrainer);
+		if(!isValid) throw new Error('Excel invalido');
+		const users: Partial<Iuser> [] = [];
+		let invalidUsers: string = '';
+
+		worksheet.eachRow({ includeEmpty: false }, async (row)=>{
+			const rowEach = row.values;
+			const user:Partial<Iuser> = { name: rowEach[1], lastName: rowEach[2], birthDate: rowEach[3], cedula: rowEach[4], email: rowEach[5], weight: rowEach[6], phone: rowEach[7], address: rowEach[8], role: 'Entrenador' };
+			users.push(user);
+		});
+		users.splice(0, 1);
+		for(const user of users){
+			if(user.email && user.birthDate){
+				const userExist = await User.getUserByEmail(user.email);
+				if(userExist) {
+					invalidUsers += `${user.email}\n`;
+				}
+				else {
+					user.birthDate = DateTime.fromFormat(user.birthDate.toString(), formatStringdDate).toJSDate();
+					user.weight = user.weight as number;
+					await User.create({ ...user });
+				}
+			}
+		}
+		if(invalidUsers.length > 0)res.send({ message: `Los siguientes usuarios no se pudieron registrar, por que sus emails ya estan registrados:\n${invalidUsers}` });
+		else res.send({ message: 'Se agregaron los usuario' });
+		emptyUploadFolder();
 	})
 };
