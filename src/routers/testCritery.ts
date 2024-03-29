@@ -10,14 +10,14 @@ export const testCriteryRouter = Router({ mergeParams: true });
 //create a critery
 testCriteryRouter.post('/', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), testCriteryController.createCritery);
+})), checkSession, checkAuth(['Admin']), testCriteryController.createCritery);
 
 // Delete a critery
 testCriteryRouter.delete('/', queryValidator(yup.object().shape({
 	criteryId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), testCriteryController.deleteCritery);
+})), checkSession, checkAuth(['Admin']), testCriteryController.deleteCritery);
 
 //get critery list
 testCriteryRouter.get('/', queryValidator(yup.object().shape({
 	limit: yup.string(),
-}).noUnknown(true)), checkSession, checkAuth([]), testCriteryController.getCriteryList);
+})), checkSession, checkAuth([]), testCriteryController.getCriteryList);

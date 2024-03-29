@@ -9,6 +9,6 @@ export const roleRouter = Router({ mergeParams: true });
 
 roleRouter.post('/', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), roleController.createRol);
+})), checkSession, checkAuth(['Admin']), roleController.createRol);
 
 roleRouter.get('/', checkSession, checkAuth(['Admin']), roleController.getRol);

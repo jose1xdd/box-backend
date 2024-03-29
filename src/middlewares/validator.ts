@@ -3,6 +3,7 @@ import { printErrorValidator } from './errorhandler';
 
 export const bodyValidator = (object:yup.AnyObjectSchema)=>async (req, res, next)=>{
 	try{
+		object = object.noUnknown(true);
 		await object.validate(req.body, { strict: true });
 		next();
 
@@ -13,6 +14,7 @@ export const bodyValidator = (object:yup.AnyObjectSchema)=>async (req, res, next
 };
 export const paramsValidator = (object:yup.AnyObjectSchema)=>async (req, res, next)=>{
 	try{
+		object = object.noUnknown(true);
 		await object.validate(req.params, { strict: true });
 		next();
 
@@ -24,6 +26,7 @@ export const paramsValidator = (object:yup.AnyObjectSchema)=>async (req, res, ne
 
 export const queryValidator = (object:yup.AnyObjectSchema)=>async (req, res, next)=>{
 	try{
+		object = object.noUnknown(true);
 		await object.validate(req.query, { strict: true });
 		next();
 

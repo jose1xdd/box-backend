@@ -8,4 +8,4 @@ export const loginRouter = Router({ mergeParams: true });
 loginRouter.post('/', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	password: yup.string().required(),
-}).noUnknown(true)), loginController.login);
+})), loginController.login);

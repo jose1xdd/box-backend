@@ -25,7 +25,7 @@ eventRouter.post('/meet', bodyValidator(yup.object().shape({
 	startsAt: yup.string().required().matches(timeRegex),
 	endsAt: yup.string().required().matches(timeRegex),
 	participants: yup.array().required().min(1)
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventMeet);
+})), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventMeet);
 
 //create a event combat
 eventRouter.post('/battle', bodyValidator(yup.object().shape({
@@ -40,19 +40,19 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 		boxer1: yup.string().required(),
 		boxer2: yup.string().required()
 	})).required().min(1)
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventBattle);
+})), checkSession, checkAuth(['Admin', 'Entrenador']), eventController.createEventBattle);
 
 //get Events
 eventRouter.get('/', paramsValidator(yup.object().shape({
 	limit: yup.string(),
 	startsAt: yup.string().matches(dateRegex),
 	endsAt: yup.string().matches(dateRegex),
-}).noUnknown(true)), checkSession, checkAuth([]), eventController.getEvent);
+})), checkSession, checkAuth([]), eventController.getEvent);
 
 //get Event by Id
 eventRouter.get('/Info', queryValidator(yup.object().shape({
 	eventId: yup.string().required()
-}).noUnknown(true)), checkSession, checkAuth([]), eventController.getEventById);
+})), checkSession, checkAuth([]), eventController.getEventById);
 
 //set event results
 eventRouter.patch('/result', bodyValidator(yup.object().shape({
@@ -62,4 +62,4 @@ eventRouter.patch('/result', bodyValidator(yup.object().shape({
 		status: yup.string().required().oneOf(COMBATSTATUS),
 		winner: yup.string()
 	})).required().min(1)
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), eventController.setEventResult);
+})), checkSession, checkAuth(['Admin']), eventController.setEventResult);

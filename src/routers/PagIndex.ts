@@ -11,19 +11,19 @@ export const indexPagRouter = Router({ mergeParams: true });
 indexPagRouter.patch('/Info', bodyValidator(yup.object().shape({
 	mision: yup.string(),
 	vision: yup.string(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), indexPagController.updateIndex);
+})), checkSession, checkAuth(['Admin']), indexPagController.updateIndex);
 
 //add section
 indexPagRouter.patch('/AddSection', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	description: yup.string().required(),
 	photo: yup.string()
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), indexPagController.addSection);
+})), checkSession, checkAuth(['Admin']), indexPagController.addSection);
 
 //delete section
 indexPagRouter.patch('/DeleteSection', queryValidator(yup.object().shape({
 	sectionId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), indexPagController.deleteSection);
+})), checkSession, checkAuth(['Admin']), indexPagController.deleteSection);
 
 //get info index
 indexPagRouter.get('/', indexPagController.getInfoIndex);
