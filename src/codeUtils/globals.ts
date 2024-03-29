@@ -8,3 +8,5 @@ export const DEAFUL_PERMISSIONS = 'Generic';
 export const COMBATSTATUS = ['winner', 'draw'];
 export const allowedExtensions = ['.jpeg', '.jpg', '.png'];
 export const expectedHeaders = ['NAME', 'LASTNAME', 'BIRTHDATE', 'CEDULA', 'EMAIL', 'WEIGHT', 'PHONE', 'ADDRESS'];
+export const expectedHeadersTrainer = ['NAME', 'LASTNAME', 'BIRTHDATE', 'CEDULA', 'EMAIL', 'PHONE', 'ADDRESS'];
+export const formatStringdDate = 'd-M-yyyy';
