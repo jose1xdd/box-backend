@@ -111,10 +111,10 @@ userRouter.post('/test', bodyValidator(yup.object().shape({
 })), checkSession, checkAuth(['Admin']), userController.createTestUser);
 
 //download user deportistas
-userRouter.get('/download/Deportistas', userController.descargarUserDeportistas);
+userRouter.get('/download/Deportistas', checkSession, checkAuth(['Admin', 'Entrenador']), userController.descargarUserDeportistas);
 
 //download user entrenador
-userRouter.get('/download/Entrenador', userController.descargarUserEntrenadores);
+userRouter.get('/download/Entrenador', checkSession, checkAuth(['Admin', 'Entrenador']), userController.descargarUserEntrenadores);
 
 userRouter.post('/:userId/uploadImage',
 	checkSession,
@@ -135,16 +135,29 @@ userRouter.get('/:userId/getUserImage',
 
 userRouter.post('/generate-password-code',
 	bodyValidator(yup.object().shape({
-		email: yup.string().email()
+		email: yup.string().email().required()
 	})),
 	userController.generatePasswordCode
 );
 
 userRouter.patch('/update-password',
 	bodyValidator(yup.object().shape({
-		email: yup.string().email(),
-		code: yup.string(),
-		password: yup.string()
+		email: yup.string().email().required(),
+		code: yup.string().required(),
+		password: yup.string().required()
 	})),
 	userController.updatePassword
+);
+
+userRouter.post('/send-comunicates',
+	bodyValidator(yup.object().shape({
+		emails: yup.array().of(
+			yup.string().email().required()
+		),
+		subject: yup.string().required(),
+		message: yup.string().required()
+	})),
+	checkSession,
+	checkAuth(['Admin', 'Entrenador']),
+	userController.sendComunicates
 );

@@ -18,7 +18,7 @@ import {
 import { checkEditPermition } from '../codeUtils/checkEditPermisions';
 import { Code } from '../database/models/code';
 import { sendEmail } from '../mails';
-import { recoveryPassword } from '../mails/templates';
+import { comunicate, recoveryPassword } from '../mails/templates';
 export const userController = {
 
 	//create an deportista user
@@ -342,6 +342,13 @@ export const userController = {
 		await Code.deleteCodeByCode(codeFetched.userId, codeFetched.code);
 		const newPassword = encrypPassword(password);
 		await User.updateUser(user._id, { password: newPassword });
+		res.send({});
+	}),
+	sendComunicates: capture(async (req, res)=>{
+		const { emails, subject, message } = req.body;
+		emails.map((element)=>{
+			sendEmail([element], subject, comunicate(subject, message, element));
+		});
 		res.send({});
 	})
 };
