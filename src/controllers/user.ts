@@ -326,17 +326,20 @@ export const userController = {
 		const { email } = req.body;
 		const user = await User.getUserByEmail(email);
 		if(!user) throw new Error('No hay un usuario asociado a ese email');
+		const fetchedCode = await Code.fetchCodeByuserId(user._id);
+		if(fetchedCode) throw new Error('Codigo pendiente');
 		const code = crypto.randomInt(100000, 999999).toString();
 		await Code.createCode(user._id, code);
-		await sendEmail([email], 'Recuperacion de contraseña', recoveryPassword);
+		sendEmail([email], 'Recuperacion de contraseña', recoveryPassword(email, code));
 		res.send({});
 	}),
 	updatePassword: capture(async (req, res)=>{
 		const { email, code, password } = req.body;
 		const user = await User.getUserByEmail(email);
 		if(!user) throw new Error('No hay un usuario asociado a ese email');
-		const codeFetched = await Code.fetchCodeByEmail(user._id, code);
+		const codeFetched = await Code.fetchCodeByCode(user._id, code);
 		if(!codeFetched)throw new Error('No hay un codigo para este usuario');
+		await Code.deleteCodeByCode(codeFetched.userId, codeFetched.code);
 		const newPassword = encrypPassword(password);
 		await User.updateUser(user._id, { password: newPassword });
 		res.send({});

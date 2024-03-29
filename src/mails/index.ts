@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
 		pass: password
 	}
 });
-export async function sendEmail(destinator:string[], subject:string, html:string) {
-	await transporter.sendMail({
+export function sendEmail(destinator:string[], subject:string, html:string) {
+	transporter.sendMail({
 		to: destinator,
 		subject,
 		html,

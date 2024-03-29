@@ -12,28 +12,28 @@ clubsRouter.post('/', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	description: yup.string().required(),
 	photo: yup.string()
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), clubsController.create);
+})), checkSession, checkAuth(['Admin']), clubsController.create);
 
 //update a club
 clubsRouter.patch('/', queryValidator(yup.object().shape({
 	clubId: yup.string().required(),
-}).noUnknown(true)), bodyValidator(yup.object().shape({
+})), bodyValidator(yup.object().shape({
 	name: yup.string(),
 	description: yup.string(),
 	photo: yup.string()
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), clubsController.updateClub);
+})), checkSession, checkAuth(['Admin']), clubsController.updateClub);
 
 // Delete a club
 clubsRouter.delete('/Delete', queryValidator(yup.object().shape({
 	clubId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), clubsController.deleteClub);
+})), checkSession, checkAuth(['Admin']), clubsController.deleteClub);
 
 //get club by Id
 clubsRouter.get('/', queryValidator(yup.object().shape({
 	clubId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth([]), clubsController.updateClub);
+})), checkSession, checkAuth([]), clubsController.updateClub);
 
 //get club list
 clubsRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
-}).noUnknown(true)), checkSession, checkAuth([]), clubsController.getClubList);
+})), checkSession, checkAuth([]), clubsController.getClubList);

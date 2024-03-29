@@ -25,7 +25,7 @@ userRouter.post('/Deportista', bodyValidator(yup.object().shape({
 	weightCategory: yup.string(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createDeportista);
+})), checkSession, checkAuth(['Admin']), userController.createDeportista);
 
 //Create admin
 userRouter.post('/Admin', bodyValidator(yup.object().shape({
@@ -36,7 +36,7 @@ userRouter.post('/Admin', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-}).noUnknown(true)), userController.createAdmin);
+})), userController.createAdmin);
 
 //Create trainer
 userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
@@ -47,7 +47,7 @@ userRouter.post('/Entrenador', bodyValidator(yup.object().shape({
 	email: yup.string().required().email(),
 	phone: yup.string().required(),
 	address: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTrainer);
+})), checkSession, checkAuth(['Admin']), userController.createTrainer);
 
 //Create generic user
 userRouter.post('/generic', bodyValidator(yup.object().shape({
@@ -59,12 +59,12 @@ userRouter.post('/generic', bodyValidator(yup.object().shape({
 	phone: yup.string().required(),
 	address: yup.string().required(),
 	role: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createGenericUser);
+})), checkSession, checkAuth(['Admin']), userController.createGenericUser);
 
 //Update a deportista
 userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), bodyValidator(yup.object().shape({
+})), bodyValidator(yup.object().shape({
 	name: yup.string(),
 	lastName: yup.string(),
 	phone: yup.string(),
@@ -72,33 +72,33 @@ userRouter.patch('/Deportista', queryValidator(yup.object().shape({
 	weight: yup.number().min(0),
 	club: yup.string(),
 	weightCategory: yup.string()
-}).noUnknown(true)), checkSession, checkAuth([]), userController.updateDeportista);
+})), checkSession, checkAuth([]), userController.updateDeportista);
 
 //Update an generic User
 userRouter.patch('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), bodyValidator(yup.object().shape({
+})), bodyValidator(yup.object().shape({
 	name: yup.string(),
 	lastName: yup.string(),
 	phone: yup.string(),
 	address: yup.string(),
-}).noUnknown(true)), checkSession, checkAuth([]), userController.updateUser);
+})), checkSession, checkAuth([]), userController.updateUser);
 
 //get an user by id
 userRouter.get('/', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador', 'Deportista']), userController.getUser);
+})), checkSession, checkAuth(['Admin', 'Entrenador', 'Deportista']), userController.getUser);
 
 //get the user List
 userRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
 	role: yup.string()
-}).noUnknown(true)), checkSession, checkAuth(['Admin', 'Entrenador']), userController.getUsersList);
+})), checkSession, checkAuth(['Admin', 'Entrenador']), userController.getUsersList);
 
 //disable an user
 userRouter.delete('/Delete', queryValidator(yup.object().shape({
 	userId: yup.string().required(),
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.disableUser);
+})), checkSession, checkAuth(['Admin']), userController.disableUser);
 
 //create test to user
 userRouter.post('/test', bodyValidator(yup.object().shape({
@@ -108,7 +108,7 @@ userRouter.post('/test', bodyValidator(yup.object().shape({
 		criteryId: yup.string().required(),
 		repeats: yup.number().required().min(0)
 	})).required()
-}).noUnknown(true)), checkSession, checkAuth(['Admin']), userController.createTestUser);
+})), checkSession, checkAuth(['Admin']), userController.createTestUser);
 
 //download user deportistas
 userRouter.get('/download/Deportistas', userController.descargarUserDeportistas);
@@ -121,7 +121,7 @@ userRouter.post('/:userId/uploadImage',
 	checkAuth(['Admin', 'Entrenador', 'Deportista']),
 	paramsValidator(yup.object().shape({
 		userId: yup.string().required()
-	}).noUnknown(true)),
+	})),
 	upload.array('image'),
 	userController.uploadProfilePhoto);
 
@@ -130,13 +130,13 @@ userRouter.get('/:userId/getUserImage',
 	checkAuth(['Admin', 'Entrenador', 'Deportista']),
 	paramsValidator(yup.object().shape({
 		userId: yup.string().required()
-	}).noUnknown(true)),
+	})),
 	userController.getProfilePhoto);
 
 userRouter.post('/generate-password-code',
 	bodyValidator(yup.object().shape({
 		email: yup.string().email()
-	}).noUnknown(true)),
+	})),
 	userController.generatePasswordCode
 );
 
