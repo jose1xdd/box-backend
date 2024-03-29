@@ -19,6 +19,8 @@ import { checkEditPermition } from '../codeUtils/checkEditPermisions';
 import { Code } from '../database/models/code';
 import { sendEmail } from '../mails';
 import { comunicate, recoveryPassword } from '../mails/templates';
+import { logger } from '../logger/winston';
+import { expectedHeaders } from '../codeUtils/globals';
 export const userController = {
 
 	//create an deportista user
@@ -307,6 +309,7 @@ export const userController = {
 			const user = await User.findById(userId);
 			if(!user)throw new Error('El usuario a modificar no existe');
 		}
+		if(!req.files) throw new Error('No se envio el archivo');
 		const files = req.files as Express.Multer.File[];
 		await validateUserImages(userId);
 		for(const file of files){
@@ -350,5 +353,26 @@ export const userController = {
 			sendEmail([element], subject, comunicate(subject, message, element));
 		});
 		res.send({});
+	}),
+	uploadMasive: capture(async (req, res)=>{
+		if(!req.file) throw new Error('No se envio un archivo');
+		const workbook = new ExcelJS.Workbook();
+		await workbook.xlsx.readFile(req.file.path);
+		const worksheet = workbook.worksheets[0];
+
+		const headers:string [] = [];
+		worksheet.getRow(1).eachCell((cell) => {
+			if(cell.value) headers.push(cell.value.toString());
+		});
+
+		const isValid = JSON.stringify(headers) === JSON.stringify(expectedHeaders);
+		if(!isValid) throw new Error('Excel invalido');
+		const data: any [] = [];
+		worksheet.eachRow({ includeEmpty: true }, (row, number)=>{
+			logger.warn('Row ' + number + ' = ' + JSON.stringify(row.values));
+			data.push(row.values);
+		});
+
+		res.send('procesado');
 	})
 };

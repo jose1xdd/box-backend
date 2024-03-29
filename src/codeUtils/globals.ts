@@ -7,3 +7,4 @@ export const DEFAUL_LIMIT = 20;
 export const DEAFUL_PERMISSIONS = 'Generic';
 export const COMBATSTATUS = ['winner', 'draw'];
 export const allowedExtensions = ['.jpeg', '.jpg', '.png'];
+export const expectedHeaders = ['NAME', 'LASTNAME', 'BIRTHDATE', 'CEDULA', 'EMAIL', 'WEIGHT', 'PHONE', 'ADDRESS'];
