@@ -1,7 +1,10 @@
 import nodemailer from 'nodemailer';
+import { logger } from '../logger/winston';
 const email = process.env.EMAIL;
 const password = process.env.EMAIL_PASSWORD;
 
+logger.warn(email);
+logger.warn(password);
 const transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
 	port: 587,
