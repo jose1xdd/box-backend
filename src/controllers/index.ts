@@ -2,6 +2,12 @@
 import mongoose from 'mongoose';
 import { Index } from '../database/models';
 import { capture } from '../middlewares/errorhandler';
+import {
+	emptyUploadFolder,
+	getLogo,
+	saveLogo,
+	validateLogo
+} from '../storage';
 export const indexPagController = {
 
 	//update mision vision index
@@ -61,4 +67,15 @@ export const indexPagController = {
 		}
 		res.send({ infoIndex: data });
 	}),
+	uploadLogo: capture(async (req, res)=>{
+		if(!req.file) throw new Error('No se envio el archivo');
+		await validateLogo();
+		await saveLogo(req.file);
+		emptyUploadFolder();
+		res.send({});
+	}),
+	getLogo: capture(async (req, res)=>{
+		const result = await getLogo();
+		res.send({ image: result[0] });
+	})
 };

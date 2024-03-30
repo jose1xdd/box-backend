@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { indexPagController } from '../controllers';
 import { checkSession } from '../middlewares/checkSession';
 import { checkAuth } from '../middlewares/checkAuth';
+import { upload } from '../storage';
 
 export const indexPagRouter = Router({ mergeParams: true });
 
@@ -27,3 +28,14 @@ indexPagRouter.patch('/DeleteSection', queryValidator(yup.object().shape({
 
 //get info index
 indexPagRouter.get('/', indexPagController.getInfoIndex);
+
+indexPagRouter.post('/upload-logo',
+	checkSession,
+	checkAuth(['Admin']),
+	upload.single('image'),
+	indexPagController.uploadLogo
+);
+
+indexPagRouter.get('/get-logo',
+	indexPagController.getLogo
+);

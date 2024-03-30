@@ -32,6 +32,24 @@ export function emptyUploadFolder() {
 		});
 	});
 }
+export async function getLogo() {
+	const folderPath = 'logo/';
+	const [files] = await storageBucket.getFiles({
+		prefix: folderPath,
+	});
+	const signedUrls: string[] = [];
+	const expirationDate = new Date();
+	expirationDate.setMinutes(expirationDate.getMinutes() + 2);
+	for (const file of files) {
+		const [signedUrl] = await file.getSignedUrl({
+			action: 'read',
+			expires: expirationDate,
+		});
+		signedUrls.push(signedUrl);
+	}
+
+	return signedUrls;
+}
 export async function getUserImage(userId: string) {
 	const folderPath = `user/${userId}`;
 	const [files] = await storageBucket.getFiles({
@@ -50,6 +68,28 @@ export async function getUserImage(userId: string) {
 
 	return signedUrls;
 }
+
+export async function saveLogo(file) {
+	const extension = path.extname(file.originalname);
+	if(!allowedExtensions.includes(extension)){
+		throw new Error('Formato de imagen no permitido');
+	}
+	const nombreAutoGenerado = `${file.fieldname}-${Date.now()}`;
+	const remoteFilePath = `logo/${nombreAutoGenerado}${extension}`;
+	const storageFile = storageBucket.file(remoteFilePath);
+	const blobStream = storageFile.createWriteStream({
+		metadata: {
+			contentType: file.mimetype, // Establece el tipo de contenido de la imagen
+		},
+	});
+
+	await blobStream.on('finish', () => {
+		logger.info('image uploaded');
+	});
+	const readStream = fs.createReadStream(file.path);
+	readStream.pipe(blobStream);
+}
+
 export async function saveUserImages(file, userId) {
 	const extension = path.extname(file.originalname);
 	if(!allowedExtensions.includes(extension)){
@@ -71,8 +111,21 @@ export async function saveUserImages(file, userId) {
 	const readStream = fs.createReadStream(file.path);
 	readStream.pipe(blobStream);
 }
+
 export async function validateUserImages(userId: string) {
 	const folderPath = `user/${userId}`;
+	const [files] = await storageBucket.getFiles({
+		prefix: folderPath,
+	});
+	if (files.length >= 1) {
+		for (const file of files) {
+			await file.delete();
+		}
+	}
+}
+
+export async function validateLogo() {
+	const folderPath = 'logo/';
 	const [files] = await storageBucket.getFiles({
 		prefix: folderPath,
 	});
