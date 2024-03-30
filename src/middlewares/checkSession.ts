@@ -10,6 +10,7 @@ export const checkSession = capture(async (req, res, next) => {
 	if(!validateToken(token)) throw Error('El token no es valido');
 	const exist = await WebToken.findOne({ token: decrypt(token) });
 	if(!exist) throw Error('La sesion ha acabado, logeate otra vez');
+	WebToken.update(exist);
 	const user = await User.findOne({ _id: exist.userId });
 	req.box = { session: { user } };
 	if(!user) throw Error('Ese token no esta asociado a ningun usuario');

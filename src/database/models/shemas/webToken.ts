@@ -6,7 +6,7 @@ const webTokenShema = new mongoose.Schema<IWebTokenDocument>({
 	ttl: {
 		type: Date,
 		require: true,
-		expires: '1m'
+		expires: '60m'
 	},
 	token: String
 }, { versionKey: false });
