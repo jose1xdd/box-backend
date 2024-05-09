@@ -4,6 +4,7 @@ declare global{
         token : string;
         ttl: Date;
         userId: mongoose.ObjectId;
+        _id: mongoose.Types.ObjectId
     }
 
     export interface IWebTokenDocument extends IWebToken, Document { }

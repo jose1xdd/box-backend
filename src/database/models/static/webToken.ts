@@ -7,7 +7,7 @@ export class webTokenModel extends Model<IWebTokenDocument> {
 		return result.userId;
 	}
 	static async update(token:IWebTokenDocument){
-		token.ttl = DateTime.now().plus({ hour: 1 }).toJSDate();
-		await this.updateOne(token);
+		const ttl = DateTime.now().plus({ hours: 1 }).toJSDate();
+		await this.updateOne({ _id: token._id }, { ttl });
 	}
 }

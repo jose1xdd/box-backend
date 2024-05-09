@@ -19,4 +19,11 @@ export const roleController = {
 		const result = await Role.find({}, { __V: 0 });
 		res.send({ role: result });
 	}),
+	deleteRol: capture(async (req, res)=>{
+		const { id } = req.params;
+		const exist = await Role.getRoleById(id);
+		if(!exist) throw Error('no existe ese rol');
+		await Role.deleteRolById(id);
+		res.send({});
+	})
 };
