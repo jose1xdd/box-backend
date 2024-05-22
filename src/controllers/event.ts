@@ -41,7 +41,6 @@ export const eventController = {
 	createEventBattle: capture(async (req, res)=>{
 		const data = req.body;
 		data.type = 'Combate';
-		const category = data.weigthCategory;
 		//setear la fecha
 		data.startsAt += ':00.000Z';
 		data.endsAt += ':00.000Z';
@@ -52,8 +51,6 @@ export const eventController = {
 		if(startsAt > endsAt) throw Error('La fecha de inicio no puede ser mayor a la final');
 		//comprobar entrenador
 		if(!mongoose.Types.ObjectId.isValid(trainerId)) throw Error('El ID del entrenador no es valido');
-		//comprobar categoria
-		if(!mongoose.Types.ObjectId.isValid(category)) throw Error('El ID de la categoria no es valido no es valido');
 		const battles = data.combats;
 		for (const battle of battles) {
 			const { boxer1 } = battle;
