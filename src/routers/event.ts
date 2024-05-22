@@ -32,7 +32,6 @@ eventRouter.post('/battle', bodyValidator(yup.object().shape({
 	name: yup.string().required(),
 	description: yup.string().required(),
 	trainer: yup.string().required(),
-	weigthCategory: yup.string().required(),
 	date: yup.string().required().matches(dateRegex),
 	startsAt: yup.string().required().matches(timeRegex),
 	endsAt: yup.string().required().matches(timeRegex),
