@@ -93,7 +93,7 @@ userRouter.get('/', queryValidator(yup.object().shape({
 userRouter.get('/List', queryValidator(yup.object().shape({
 	limit: yup.string(),
 	role: yup.string()
-})), checkSession, checkAuth(['Admin', 'Entrenador']), userController.getUsersList);
+})), checkSession, checkAuth([]), userController.getUsersList);
 
 //disable an user
 userRouter.delete('/Delete', queryValidator(yup.object().shape({
